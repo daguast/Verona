@@ -11,77 +11,150 @@
 :root{
   --bg:#EEEAE7; --surface:#F8F6F5; --ink:#2B2226; --muted:#6B5F63; --line:#D6CFCC;
   --accent:#2E6A63; --accent-ink:#FFFFFF; --food:#6E1F33; --ok:#2E6A63; --bad:#9A2F2F;
-  --p-modern:#5F6468; --p-empire:#C7A86A; --p-venice:#2F5D7C; --p-scaliger:#8E2B2B; --p-commune:#964A37; --p-roman:#D8CCB6;
-  color-scheme: light;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
+  --p-modern:#5F6468; --p-empire:#C7A86A; --p-venice:#2F5D7C; --p-scaliger:#8E2B2B; --p-commune:#964A37; --p-early:#5C6B4A; --p-roman:#D8CCB6;
+  color-scheme: light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1C1A1B; --surface:#262224; --ink:#EEE8EA; --muted:#B3A8AC; --line:#3A3436;
-    --accent:#6FB3A9; --accent-ink:#13201E; --food:#D9849A; --ok:#6FB3A9; --bad:#E08484;
-    color-scheme: dark;
+    --accent:#6FB3A9; --accent-ink:#13201E; --food:#D9849A; --ok:#6FB3A9; --bad:#E08484; color-scheme: dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#1C1A1B; --surface:#262224; --ink:#EEE8EA; --muted:#B3A8AC; --line:#3A3436;
-  --accent:#6FB3A9; --accent-ink:#13201E; --food:#D9849A; --ok:#6FB3A9; --bad:#E08484;
-  color-scheme: dark;
+  --accent:#6FB3A9; --accent-ink:#13201E; --food:#D9849A; --ok:#6FB3A9; --bad:#E08484; color-scheme: dark;
 }
 *,*::before,*::after{box-sizing:inherit}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 6rem)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Spectral",Georgia,"Times New Roman",serif;font-size:1.0625rem;line-height:1.6}
-.wrap{max-width:42rem;margin:0 auto;padding:0 1.15rem}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
 h1,h2,h3{font-family:"Cinzel","Trajan Pro","Times New Roman",serif;font-weight:700;letter-spacing:.02em;line-height:1.15;margin:0}
 a{color:var(--accent)}
 button,select,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:42rem;margin:0 auto;padding:0 1.15rem}
 
-/* Hero */
-.hero{padding:2.2rem 0 1.4rem}
-.hero h1{font-size:clamp(2.1rem,9vw,3.3rem)}
-.hero .lede{font-size:1.15rem;color:var(--muted);margin:.7rem 0 1.4rem;max-width:34rem}
+/* Top bar and tabs */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:25;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:2.8rem}
+.brand{font-family:"Cinzel",serif;font-weight:700;font-size:.98rem;letter-spacing:.03em}
+.pts{font-size:.95rem;color:var(--muted)} .pts b{font-family:"Cinzel",serif;color:var(--ink);font-size:1.05rem}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs .wrap{display:flex;padding:0}
+.tabs button{flex:1;background:none;border:0;border-top:3px solid transparent;padding:.7rem .15rem .65rem;font-size:.92rem;color:var(--muted)}
+.tabs button[aria-current="page"]{color:var(--ink);font-weight:600;border-top-color:var(--accent)}
+main{padding-bottom:6rem}
+.view[hidden]{display:none}
+.view{padding-top:1.4rem}
+.view > h2{font-size:1.55rem;margin-bottom:.4rem}
+.intro{color:var(--muted);margin:.2rem 0 1.1rem}
 
-/* Strata: the memorable element */
+/* Story */
+.hero h1{font-size:clamp(2rem,9vw,3.1rem)}
+.hero .lede{font-size:1.12rem;color:var(--muted);margin:.6rem 0 1.2rem;max-width:34rem}
+.film{margin:0 0 2rem}
+.stage{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#EDE6DA}
+.stage-svg{display:block;width:100%;height:auto}
+.playbig{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);background:#2B2226;color:#fff;border:0;border-radius:999px;padding:.75rem 1.4rem;font-weight:600;font-size:1.02rem;white-space:nowrap}
+.segs{display:flex;gap:4px;margin:.55rem 0 .2rem}
+.seg{flex:1;height:14px;padding:5px 0;background:none;border:0}
+.seg span{display:block;height:4px;width:0;background:var(--accent);border-radius:2px}
+.seg{background:linear-gradient(var(--line),var(--line)) center/100% 4px no-repeat}
+.seg.full span{width:100%}
+.film.playing .seg.live span,.film.paused .seg.live span{animation:segfill linear forwards}
+.film.paused .seg.live span{animation-play-state:paused}
+@keyframes segfill{from{width:0}to{width:100%}}
+.cap{min-height:4.9em;margin:.3rem 0 .5rem;font-size:1.06rem}
+.fctl{display:flex;gap:.5rem}
+.fctl .btn{flex:1}
+
+.sc{opacity:0;visibility:hidden;transition:opacity .45s}
+.sc.on{opacity:1;visibility:visible}
+.sc *{transform-box:fill-box}
+.a-draw{stroke-dasharray:1;stroke-dashoffset:1}
+.a-fade,.a-drop,.a-float,.a-flash{opacity:0}
+.a-pop,.a-spin{transform:scale(0);transform-origin:center}
+.a-rise{transform:scaleY(0);transform-origin:bottom}
+.a-slide{transform:translateX(-840px)}
+.a-fall,.a-blast,.a-shake{transform-origin:center}
+.sc.on .a-draw{animation:draw var(--d,1.2s) ease var(--t,0s) forwards}
+.sc.on .a-fade{animation:fade .8s ease var(--t,0s) forwards}
+.sc.on .a-pop{animation:pop .6s cubic-bezier(.3,1.5,.5,1) var(--t,0s) forwards}
+.sc.on .a-rise{animation:rise .8s ease-out var(--t,0s) forwards}
+.sc.on .a-drop{animation:drop .9s ease-out var(--t,0s) forwards}
+.sc.on .a-shake{animation:shake .9s linear var(--t,0s) 1}
+.sc.on .a-fall{animation:fall 1.1s ease-in var(--t,0s) forwards}
+.sc.on .a-slide{animation:slide .7s ease-out var(--t,0s) forwards}
+.sc.on .a-float{animation:float 2.6s ease-out var(--t,0s) infinite}
+.sc.on .a-spin{animation:spin 1s ease-out var(--t,0s) forwards}
+.sc.on .a-blast{animation:blast 8.5s ease-in-out var(--t,0s) forwards}
+.sc.on .a-flash{animation:flash 8.5s linear forwards}
+.film.paused .sc *{animation-play-state:paused}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes rise{to{transform:scaleY(1)}}
+@keyframes drop{from{transform:translateY(-150px);opacity:0}70%{transform:translateY(8px);opacity:1}to{transform:translateY(0);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}30%{transform:translateX(7px)}45%{transform:translateX(-6px)}60%{transform:translateX(5px)}80%{transform:translateX(-3px)}}
+@keyframes fall{to{transform:translateY(230px) rotate(28deg);opacity:0}}
+@keyframes slide{to{transform:translateX(0)}}
+@keyframes float{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-130px);opacity:0}}
+@keyframes spin{from{transform:rotate(-200deg) scale(0)}to{transform:rotate(0) scale(1)}}
+@keyframes blast{0%,23%{transform:none;opacity:1}38%,60%{transform:translateY(118px) rotate(16deg);opacity:.85}86%,100%{transform:none;opacity:1}}
+@keyframes flash{0%,21%{opacity:0}24%{opacity:.95}33%,100%{opacity:0}}
+@media (prefers-reduced-motion: reduce){
+  .sc.on *{animation-duration:.01s !important;animation-delay:0s !important;animation-iteration-count:1 !important}
+  .sc{transition:none}
+}
+.f-river{fill:none;stroke:#7FB2C6;stroke-width:30;stroke-linecap:round}
+.f-grid{fill:none;stroke:#B9A888;stroke-width:3}
+.f-road{fill:none;stroke:#8E2B2B;stroke-width:6;stroke-linecap:round}
+.f-wall{fill:none;stroke:#5C6B4A;stroke-width:7}
+.f-year{font-family:Cinzel,serif;font-weight:700;font-size:62px;fill:#2B2226}
+.f-big{font-family:Cinzel,serif;font-weight:700;font-size:30px;fill:#2B2226}
+.f-bigw{font-family:Cinzel,serif;font-weight:700;font-size:28px;fill:#F3EBDD}
+.f-lab{font-family:Spectral,serif;font-style:italic;font-size:23px;fill:#4A3F43}
+.f-labw{font-family:Spectral,serif;font-size:23px;fill:#F3EBDD}
+.f-band{font-family:Cinzel,serif;font-weight:700;font-size:19px}
+
+/* Strata */
 .strata{display:flex;flex-direction:column;border-radius:4px;overflow:hidden}
-.band{position:relative;display:flex;align-items:center;justify-content:space-between;gap:.75rem;
-  padding:.85rem 1rem .95rem;border:0;width:100%;text-align:left;margin-top:-6px;
+.band{position:relative;display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.8rem 1rem .9rem;border:0;width:100%;text-align:left;margin-top:-6px;
   clip-path:polygon(0 6px,8% 2px,19% 7px,31% 3px,44% 6px,57% 1px,70% 5px,83% 2px,93% 6px,100% 3px,100% 100%,0 100%)}
 .band:first-child{margin-top:0;clip-path:none}
-.band .bname{font-family:"Cinzel",serif;font-weight:700;font-size:1.02rem;letter-spacing:.02em}
-.band .byears{font-size:.9rem;opacity:.85;display:block}
-.pips{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end}
-.pip{width:.8rem;height:.8rem;border-radius:50%;border:2px solid currentColor;opacity:.75}
+.band .bname{font-family:"Cinzel",serif;font-weight:700;font-size:1rem;letter-spacing:.02em}
+.band .byears{font-size:.88rem;opacity:.85;display:block}
+.band[aria-expanded="true"]{box-shadow:inset 6px 0 0 var(--ink)}
+.pips{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;max-width:6.5rem}
+.pip{width:.75rem;height:.75rem;border-radius:50%;border:2px solid currentColor;opacity:.75}
 .pip.on{background:currentColor;opacity:1}
 .b-modern{background:var(--p-modern);color:#fff}
 .b-empire{background:var(--p-empire);color:#2B2226}
 .b-venice{background:var(--p-venice);color:#fff}
 .b-scaliger{background:var(--p-scaliger);color:#fff}
 .b-commune{background:var(--p-commune);color:#fff}
-.b-roman{background:var(--p-roman);color:#2B2226;padding-bottom:1.3rem}
-.strata-note{font-size:.95rem;color:var(--muted);margin:.6rem 0 0}
-.scorebar{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.1rem;padding:.7rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.scorebar strong{font-family:"Cinzel",serif;font-size:1.25rem}
+.b-early{background:var(--p-early);color:#fff}
+.b-roman{background:var(--p-roman);color:#2B2226}
+.layer{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1rem 1rem 1.1rem;margin:1rem 0 0}
+.layer h3{font-size:1.2rem;margin-bottom:.1rem}
+.layer .yrs{color:var(--muted);margin:0 0 .6rem}
+.layer dt{font-weight:600;margin-top:.6rem}
+.layer dd{margin:0}
+.layer ul{padding-left:1.1rem;margin:.2rem 0 0}
+.layer li{margin:.3rem 0}
+.stoplinks{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
+.stoplinks button{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.3rem .75rem;font-size:.92rem}
+.pager{display:flex;gap:.5rem;margin-top:1rem}
+.pager .btn{flex:1}
+
+/* Shared controls */
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:5px;padding:.6rem 1rem;font-weight:600}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn:disabled{opacity:.4;cursor:default}
 .linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;padding:.3rem}
-
-/* Sections */
-section{padding:2.2rem 0 .5rem}
-section > h2{font-size:1.55rem;margin-bottom:.5rem}
-.intro{color:var(--muted);margin:.2rem 0 1.2rem}
-
-/* Food */
-.food h2{color:var(--food)}
-.dish{padding:.8rem 0;border-bottom:1px solid var(--line)}
-.dish h3{font-family:"Spectral",serif;font-weight:600;font-size:1.12rem;letter-spacing:0}
-.dish p{margin:.2rem 0 0}
-.eat{list-style:none;padding:0;margin:0}
-.eat li{padding:.55rem 0;border-bottom:1px solid var(--line)}
-.eat b{font-weight:600}
-
-/* Game panels */
+.cta{display:block;width:100%;margin:1.6rem 0 0;padding:.85rem;font-size:1.05rem}
 .game{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:1rem 1rem 1.1rem;margin:1.1rem 0}
 .game h3{font-family:"Spectral",serif;font-weight:600;font-size:1.08rem;letter-spacing:0;margin-bottom:.35rem}
 .game .hint{color:var(--muted);font-size:.95rem;margin:0 0 .7rem}
@@ -90,29 +163,35 @@ section > h2{font-size:1.55rem;margin-bottom:.5rem}
 select,input[type=number],textarea{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:.45rem .55rem;max-width:100%}
 select{flex:1 1 10rem}
 textarea{width:100%;min-height:4.5rem;resize:vertical}
-.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:5px;padding:.55rem 1rem;font-weight:600}
-.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
 .fb{margin:.6rem 0 0;font-size:.98rem}
 .fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
 .mark-ok{color:var(--ok);font-weight:600} .mark-bad{color:var(--bad);font-weight:600}
 
-/* Timeline of stops */
-.stop{position:relative;padding:1.4rem 0 1rem 3.4rem;border-left:2px solid var(--line);margin-left:1.2rem}
-.stop .num{position:absolute;left:-1.25rem;top:1.2rem;width:2.5rem;height:2.5rem;border-radius:50%;display:grid;place-items:center;
-  font-family:"Cinzel",serif;font-weight:700;font-size:.9rem;background:var(--surface);border:2px solid var(--line)}
-.stop.stamped .num{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.stop .time{color:var(--muted);font-size:.95rem}
-.stop h3{font-size:1.28rem;margin:.1rem 0 .35rem}
-.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.2rem 0 .5rem}
+/* Food */
+#v-food > h2{color:var(--food)}
+.dish{padding:.8rem 0;border-bottom:1px solid var(--line)}
+.dish h3{font-family:"Spectral",serif;font-weight:600;font-size:1.12rem;letter-spacing:0}
+.dish p{margin:.2rem 0 0}
+.sub{font-family:"Spectral",serif;font-weight:600;letter-spacing:0;font-size:1.12rem;margin-top:1.4rem}
+.eat{list-style:none;padding:0;margin:0}
+.eat li{padding:.55rem 0;border-bottom:1px solid var(--line)}
+.eat b{font-weight:600}
+
+/* Walk */
+.strip{position:sticky;top:calc(env(safe-area-inset-top,0px) + 2.8rem);z-index:20;background:var(--bg);display:flex;gap:.35rem;overflow-x:auto;padding:.6rem 1.15rem;margin:0 -1.15rem .6rem;border-bottom:1px solid var(--line);scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.chipb{flex:0 0 auto;min-width:2.5rem;height:2.5rem;padding:0 .6rem;border-radius:999px;background:var(--surface);border:2px solid var(--line);font-family:"Cinzel",serif;font-weight:700;font-size:.85rem}
+.chipb.meal{font-family:"Spectral",serif;font-weight:600;color:var(--food);font-size:.9rem}
+.chipb.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chipb.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
+.card .time{color:var(--muted);font-size:.98rem}
+.card h3{font-size:1.45rem;margin:.15rem 0 .45rem}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.2rem 0 .6rem}
 .chip{font-size:.82rem;padding:.12rem .55rem;border-radius:999px;font-weight:600}
-.walk{font-style:italic;color:var(--muted);margin:.2rem 0 .6rem}
-details.stopbody > summary{list-style:none;cursor:pointer;color:var(--accent);font-weight:600;padding:.3rem 0}
-details.stopbody > summary::-webkit-details-marker{display:none}
-details.stopbody > summary::before{content:"+ ";}
-details.stopbody[open] > summary::before{content:"– ";}
+.walknote{font-style:italic;color:var(--muted);margin:.2rem 0 .8rem}
 .facts{padding-left:1.1rem;margin:.6rem 0}
-.facts li{margin:.35rem 0}
-.look{margin:1rem 0;padding:.8rem 1rem;border:1px dashed var(--line);border-radius:6px}
+.facts li{margin:.4rem 0}
+.look{margin:1rem 0;padding:.8rem 1rem;border:1px dashed var(--muted);border-radius:6px}
 .look p{margin:0}
 .look .ans{margin-top:.5rem;color:var(--accent)}
 .quiz .opts{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
@@ -121,195 +200,266 @@ details.stopbody[open] > summary::before{content:"– ";}
 .opt.right{border-color:var(--ok);color:var(--ok);font-weight:600}
 .opt.wrong{border-color:var(--bad);color:var(--bad)}
 .opt:disabled{cursor:default}
-.stamp{margin-top:.6rem}
-.maplink{font-size:.95rem}
-.meal{margin:1.2rem 0 0 1.2rem;padding:1rem 1rem 1rem 3.4rem;position:relative;border-left:2px solid var(--line)}
-.meal::before{content:"";position:absolute;left:-.55rem;top:1.25rem;width:1rem;height:1rem;border-radius:50%;background:var(--food)}
-.meal h3{font-family:"Spectral",serif;font-weight:600;font-size:1.12rem;letter-spacing:0;color:var(--food)}
-.meal p{margin:.25rem 0 0}
+.mealcard h3{color:var(--food)}
+.stepnav{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--line)}
+.stepnav .wide{grid-column:1 / -1}
+.osm{display:block;margin-top:.7rem;font-size:.97rem}
 
-/* Order game */
-.pool,.seq{display:flex;flex-direction:column;gap:.4rem}
-.ev{background:var(--bg);border:1.5px solid var(--line);border-radius:6px;padding:.55rem .7rem;text-align:left}
-.seq .ev{border-style:solid;border-color:var(--accent)}
-.seq-label{font-size:.92rem;color:var(--muted);margin:.8rem 0 .3rem}
-.practical p{margin:.4rem 0}
-.fab{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:20;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:.75rem 1.2rem;font-weight:600;box-shadow:0 3px 10px rgba(0,0,0,.28)}
-.sheet{position:fixed;inset:0;z-index:30;background:rgba(20,16,18,.5);display:flex;align-items:flex-end;justify-content:center}
-.sheet[hidden]{display:none}
-.panel{background:var(--surface);width:100%;max-width:42rem;max-height:94vh;overflow:auto;border-radius:12px 12px 0 0;padding:1rem 1rem calc(1rem + env(safe-area-inset-bottom,0px))}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.6rem}
-.panel-head h2{font-size:1.25rem}
-.closebtn{background:var(--bg);border:1px solid var(--line);border-radius:999px;width:2.5rem;height:2.5rem;font-size:1.3rem;line-height:1}
-.views{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem}
-.views .btn{padding:.4rem .8rem}
-.mapsvg{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+/* Map */
+.views{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem}
+.views .btn{padding:.4rem .75rem;font-size:.95rem}
+.mapsvg{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:8px}
 .m-river{fill:none;stroke:#9CC3D1;stroke-width:52;stroke-linecap:round;stroke-linejoin:round}
 .m-street{fill:none;stroke:var(--line);stroke-width:10;stroke-linecap:round;stroke-linejoin:round}
+.m-roman{fill:none;stroke:var(--p-scaliger);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 12}
 .m-route{fill:none;stroke:var(--muted);stroke-width:4;stroke-dasharray:10 9;opacity:.8}
-.m-label{font-family:Spectral,serif;font-style:italic;font-size:22px;fill:var(--muted)}
+.m-label{font-family:Spectral,serif;font-style:italic;font-size:20px;fill:var(--muted)}
+.m-rlabel{font-family:Spectral,serif;font-weight:600;font-size:20px;fill:var(--p-scaliger)}
 .m-mk{cursor:pointer}
 .m-mk .main{fill:var(--surface);stroke:var(--ink);stroke-width:3}
-.m-mk text{font-family:Cinzel,serif;font-weight:700;font-size:15px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.m-mk text{font-family:Cinzel,serif;font-weight:700;font-size:13px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none}
 .m-mk.done .main{fill:var(--accent);stroke:var(--accent)} .m-mk.done text{fill:var(--accent-ink)}
 .m-mk .halo{fill:none;stroke:var(--accent);stroke-width:4;stroke-dasharray:6 5}
 .m-mk.sel .main{stroke:var(--food);stroke-width:7}
-.m-mk.meal .main{fill:var(--food);stroke:var(--food)} .m-mk.meal text{fill:#fff;font-size:14px}
+.m-mk.meal .main{fill:var(--food);stroke:var(--food)} .m-mk.meal text{fill:#fff}
 .m-me{fill:#2F7DE1;stroke:#fff;stroke-width:4}
 .m-mk:focus{outline:none} .m-mk:focus-visible .main{stroke:var(--accent);stroke-width:7}
 .mapcard{margin-top:.8rem;padding:.8rem 0 0;border-top:1px solid var(--line)}
-.mapcard h3{font-size:1.1rem;margin:.1rem 0 .5rem}
+.mapcard h3{font-size:1.15rem;margin:.1rem 0 .5rem}
 .mapcard .row a{margin-right:.6rem}
-.mapnote{font-size:.88rem;color:var(--muted);margin:.5rem 0 0}
-.nextnav{margin-top:1.1rem;padding-top:.8rem;border-top:1px solid var(--line)}
-.nextnav .row a{font-size:.97rem}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .m-river{stroke:#2F5566}}
+.mapnote{font-size:.9rem;color:var(--muted);margin:.5rem 0 0}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .m-river{stroke:#2F5566}
+  :root:not([data-theme="light"]) .m-roman{stroke:#D98A8A}
+  :root:not([data-theme="light"]) .m-rlabel{fill:#D98A8A}
+}
 :root[data-theme="dark"] .m-river{stroke:#2F5566}
-footer{padding:2rem 0 6rem;color:var(--muted);font-size:.92rem}
+:root[data-theme="dark"] .m-roman{stroke:#D98A8A}
+:root[data-theme="dark"] .m-rlabel{fill:#D98A8A}
+
+/* Finale */
+.rank{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1rem;margin:0 0 1.2rem}
+.rank strong{font-family:"Cinzel",serif;font-size:1.3rem;display:block}
+.pool,.seq{display:flex;flex-direction:column;gap:.4rem}
+.ev{background:var(--bg);border:1.5px solid var(--line);border-radius:6px;padding:.55rem .7rem;text-align:left}
+.seq .ev{border-color:var(--accent)}
+.seq-label{font-size:.92rem;color:var(--muted);margin:.8rem 0 .3rem}
+.practical p{margin:.45rem 0}
 </style>
 </head>
 <body>
-<div class="wrap">
+<header class="top"><div class="wrap"><span class="brand">Verona, layer by layer</span><span class="pts"><b id="score">0</b> points</span></div></header>
 
-<header class="hero">
-  <h1>Verona, layer by layer</h1>
-  <p class="lede">A slow Saturday through the centro storico, from the Roman forum to the bombed and rebuilt bridges of 1945. Eat well first, then read the city one layer at a time.</p>
-  <div class="strata" id="strata" aria-label="Periods of Verona, newest at the top. Tap one to jump to its first stop."></div>
-  <p class="strata-note">Today’s Piazza delle Erbe sits about 3.5 m above the Roman forum. Each stop you stamp fills a dot in its layer.</p>
-  <div class="scorebar">
-    <div><strong id="score">0</strong> points <span id="stampcount" style="color:var(--muted)"></span></div>
-    <button class="linkbtn" id="reset">Start over</button>
+<main class="wrap">
+
+<section class="view" id="v-story">
+  <div class="hero">
+    <h1>Verona, layer by layer</h1>
+    <p class="lede">A slow Saturday through the centro storico, from the Roman grid to the bridges blown up in 1945. Watch the story, eat well, then read the city one layer at a time.</p>
   </div>
-</header>
+  <div class="film" id="film">
+    <div class="stage" id="stage"><div id="stagebox"></div><button class="playbig" id="filmplay">Play the story (75 seconds)</button></div>
+    <div class="segs" id="segs"></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="fctl"><button class="btn ghost" id="fprev">Back</button><button class="btn" id="ftoggle">Play</button><button class="btn ghost" id="fnext">Next</button></div>
+  </div>
+  <h2>The seven layers</h2>
+  <p class="intro">Newest on top, Rome at the bottom, as in the ground. Tap a layer to see who they were, how they got in and what they left. Dots fill as you stamp stops.</p>
+  <div class="strata" id="strata"></div>
+  <div id="layer"></div>
+  <button class="btn cta" data-go="food">Next: the Veronese table</button>
+</section>
 
-<section class="food" id="food">
-  <h2>First, the Veronese table</h2>
+<section class="view" id="v-food" hidden>
+  <h2>The Veronese table</h2>
   <p class="intro">Verona’s cooking is hearty, wine-soaked and proudly unfashionable. November is the right season for most of it.</p>
-
   <div class="dish"><h3>Lesso con pearà</h3><p>Boiled meats with pearà: a thick sauce of breadcrumbs, beef marrow, broth and a great deal of black pepper. A cold-season dish, served roughly October to March.</p></div>
-  <div class="dish"><h3>Pastissada de caval</h3><p>Horse meat marinated in Valpolicella wine with spices, then stewed for hours and served with polenta. Legend ties it to 489, when Theodoric beat Odoacer outside Verona and the fallen horses were cooked in wine. Historians are sceptical, but the city has made it an official local dish anyway.</p></div>
+  <div class="dish"><h3>Pastissada de caval</h3><p>Horse meat marinated in Valpolicella wine with spices, stewed for hours and served with polenta. Legend ties it to 489, when Theodoric beat Odoacer outside Verona and the fallen horses were cooked in wine. Historians are sceptical, but the city has made it an official local dish anyway.</p></div>
   <div class="dish"><h3>Bigoli con l’arna</h3><p>Thick, rough pasta squeezed through a bronze press, with duck ragù. The name comes from the dialect <i>bigat</i>, caterpillar.</p></div>
   <div class="dish"><h3>Risotto all’Amarone</h3><p>Risotto finished with Amarone, the big red made from grapes dried for months in the Valpolicella hills.</p></div>
   <div class="dish"><h3>Gnocchi</h3><p>Verona’s carnival is the Venerdì Gnocolar, ruled by the Papà del Gnoco. The San Zeno district’s Bacanal del Gnoco is said to commemorate a food handout during the 1531 famine.</p></div>
   <div class="dish"><h3>Pandoro and nadalin</h3><p>Pastry chef Domenico Melegatti patented the pandoro in Verona on 14 October 1894, with an eight-pointed star mould designed by the painter Angelo Dall’Oca Bianca. Its flatter ancestor, the nadalin, goes back much further. Mid-November is when both start appearing in pastry shops.</p></div>
-  <div class="dish"><h3>In the glass</h3><p>Valpolicella, Amarone and sweet Recioto from the hills to the north-west; Soave white from the east; Bardolino from Lake Garda. And Monte Veronese cheese from the Lessinia uplands to go with it. A glass of wine is an <i>ombra</i>.</p></div>
-
+  <div class="dish"><h3>In the glass</h3><p>Valpolicella, Amarone and sweet Recioto from the hills to the north-west; Soave white from the east; Bardolino from Lake Garda. Monte Veronese cheese from the Lessinia uplands goes with all of them. A glass of wine is an <i>ombra</i>.</p></div>
   <div class="game" id="g-dialect"></div>
-
-  <h3 style="font-family:Spectral,serif;font-weight:600;letter-spacing:0;font-size:1.12rem;margin-top:1.4rem">Where to eat along the route</h3>
+  <h3 class="sub">Where to eat along the route</h3>
   <ul class="eat">
-    <li><b>Caffè Borsari</b>, Corso Porta Borsari. Tiny historic coffee bar, right on the Roman road.</li>
-    <li><b>Osteria al Duca</b>, Via Arche Scaligere. Lunch inside the medieval house of the Montecchi, Romeo’s family. Pastissada, bigoli, gnocchi.</li>
+    <li><b>Caffè Borsari</b>, Corso Porta Borsari. Tiny historic coffee bar, right on the Roman decumanus.</li>
+    <li><b>Osteria al Duca</b>, Via Arche Scaligere. Lunch inside the medieval house of the Montecchi, Romeo’s family.</li>
     <li><b>Osteria Sottoriva</b>, Via Sottoriva. Under medieval porticoes by the river: the end-of-day ombra.</li>
-    <li><b>Antica Bottega del Vino</b>, off Via Mazzini. A wine institution since 1890, with an enormous list.</li>
+    <li><b>Antica Bottega del Vino</b>, off Via Mazzini. A wine institution since 1890.</li>
     <li><b>Trattoria al Bersagliere</b>, Filippini area. Family trattoria since 1928, a reference for pastissada.</li>
   </ul>
   <p class="intro" style="margin-top:.7rem">It’s a Saturday: book lunch and dinner.</p>
+  <button class="btn cta" data-go="walk">Start the walk</button>
 </section>
 
-<section id="walk">
-  <h2>The walk</h2>
-  <p class="intro">About 6–7 km at strolling pace, timed for a November sunset (around 16:45). In summer, push the afternoon later. Tap a stop to open it.</p>
-  <div id="stops"></div>
+<section class="view" id="v-walk" hidden>
+  <div class="strip" id="strip" aria-label="Stops"></div>
+  <div class="card" id="card"></div>
 </section>
 
-<section id="finale">
-  <h2>Put the layers back</h2>
-  <p class="intro">End of the day test. Tap the events in the order they happened, oldest first.</p>
-  <div class="game" id="g-order"></div>
-</section>
-
-<section class="practical">
-  <h2>Before you go</h2>
-  <p>Opening hours shift with the season. Check Torre dei Lamberti (listed as 11:00–19:00 at weekends), the Arena, Castelvecchio, Juliet’s House and the Teatro Romano on the day.</p>
-  <p>If you plan to enter several of these, a VeronaCard can work out cheaper than separate tickets. Check what it currently includes.</p>
-  <p>Sant’Anastasia charges a small entry fee for visitors.</p>
-</section>
-
-<footer>Made for a slow Saturday in Verona. Your points and stamps stay on this device.</footer>
-</div>
-<button class="fab" id="fab" aria-haspopup="dialog">Map</button>
-<div class="sheet" id="sheet" hidden>
-  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="maptitle">
-    <div class="panel-head"><h2 id="maptitle">The route</h2><button class="closebtn" id="mapclose" aria-label="Close map">×</button></div>
-    <div class="views"><button class="btn ghost" data-view="all">Whole route</button><button class="btn ghost" data-view="centre">Zoom on the centre</button><button class="btn ghost" id="locate">Where am I?</button></div>
-    <div id="mapbox"></div>
-    <p class="mapnote" id="mapmsg">Simplified map drawn from OpenStreetMap coordinates. Tap a marker; use the OSM links for turn-by-turn walking.</p>
-    <div class="mapcard" id="mapcard"></div>
+<section class="view" id="v-map" hidden>
+  <h2>The route</h2>
+  <div class="views">
+    <button class="btn ghost" data-view="all">Whole route</button>
+    <button class="btn ghost" data-view="centre">Zoom on the centre</button>
+    <button class="btn ghost" id="romanbtn">Show Roman streets</button>
+    <button class="btn ghost" id="locate">Where am I?</button>
   </div>
-</div>
+  <div id="mapbox"></div>
+  <p class="mapnote" id="mapmsg">Simplified map, hand-placed from real coordinates. Tap a marker; use the OSM links for turn-by-turn walking.</p>
+  <div class="mapcard" id="mapcard"></div>
+</section>
+
+<section class="view" id="v-finale" hidden>
+  <h2>Put the layers back</h2>
+  <div class="rank" id="rank"></div>
+  <p class="intro">End-of-day test. Tap the events in the order they happened, oldest first.</p>
+  <div class="game" id="g-order"></div>
+  <div class="practical">
+    <h3 class="sub">Before you go</h3>
+    <p>Opening hours shift with the season. Check Torre dei Lamberti, the Arena, Castelvecchio, Juliet’s House, the Teatro Romano and the Scavi Scaligeri on the day.</p>
+    <p>If you plan to enter several of these, a VeronaCard can work out cheaper than separate tickets. Check what it currently includes.</p>
+    <p>Sant’Anastasia charges a small entry fee for visitors.</p>
+    <p>The day is timed for a mid-November sunset, around 16:45. In summer, push the afternoon later.</p>
+  </div>
+  <p style="margin-top:1.5rem"><button class="linkbtn" id="reset">Clear all stamps, answers and points</button></p>
+</section>
+
+</main>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <button data-go="story">Story</button>
+  <button data-go="food">Table</button>
+  <button data-go="walk">Walk</button>
+  <button data-go="map">Map</button>
+  <button data-go="finale">Finale</button>
+</div></nav>
 
 <script>
 (function(){
 "use strict";
-var KEY="verona-layers-v1";
-var PERIODS=[
-  {id:"modern",name:"Italy and the 20th century",years:"1866 – today"},
-  {id:"empire",name:"Napoleon and Austria",years:"1797 – 1866"},
-  {id:"venice",name:"Venetian Republic",years:"1405 – 1797"},
-  {id:"scaliger",name:"Della Scala lords",years:"1260s – 1387"},
-  {id:"commune",name:"Free commune",years:"1100s – 1260s"},
-  {id:"roman",name:"Roman Verona",years:"1st c. BC – 5th c. AD"}
+var KEY="verona-layers-v2";
+var VIEWS=["story","food","walk","map","finale"];
+
+var LAYERS=[
+ {id:"modern",name:"Italy and the 20th century",years:"1866 – today",
+  who:"The Kingdom of Italy, then the Republic.",
+  how:"After the war of 1866 Austria gave up the Veneto, and a plebiscite joined it to Italy.",
+  left:["New river walls after the 1882 flood, pandoro in 1894, opera in the Arena from 1913.",
+   "First World War: Verona was a rear base for the Alpine front. On 14 November 1915 Austrian planes bombed the crowded market in Piazza Erbe, one of the first air raids on civilians anywhere.",
+   "Second World War: after September 1943 Verona became a capital of Mussolini’s German-backed republic and a German command centre. The Fascist congress and the 1944 trial of Galeazzo Ciano were held in Castelvecchio. Deportation trains bound for the Brenner passed through. Allied bombing wrecked much of the city, and on 25 April 1945 the retreating Germans blew up every bridge. Verona was freed the next day.",
+   "Rebuilding: Ponte Pietra stone by stone (1959), Carlo Scarpa’s Castelvecchio, and Juliet’s balcony, a 1930s invention."]},
+ {id:"empire",name:"Napoleon and Austria",years:"1797 – 1866",
+  who:"French revolutionary armies, then the Habsburgs of Vienna.",
+  how:"Napoleon arrived in 1796. The anti-French revolt of the Pasque Veronesi (April 1797) was crushed and Venice fell. From 1801 to 1805 the Adige was an international border, French on the city side and Austrian across the river. Austria held everything from 1815.",
+  left:["Napoleon dismantled the Arco dei Gavi and turned Castelvecchio into barracks.",
+   "Austria made Verona one of the four fortresses of the Quadrilatero: forts, the Arsenale, the barracks on Castel San Pietro.",
+   "Palazzo Barbieri, today’s city hall on Piazza Bra."]},
+ {id:"venice",name:"Venetian Republic",years:"1405 – 1797",
+  who:"The Republic of Venice, the Serenissima.",
+  how:"Verona handed itself over in 1405, tired of being fought over by Milan and Padua. No siege: a delegation carried the keys to Venice.",
+  left:["The lion column in Piazza Erbe, the Loggia del Consiglio, the Gran Guardia, the stone mouths for anonymous denunciations.",
+   "Gates and bastions by the Veronese architect Michele Sanmicheli.",
+   "Frescoed façades, the “painted city”, and the painter Paolo Veronese, who carried the city’s name.",
+   "Scipione Maffei’s Lapidary Museum, one of Europe’s first public museums."]},
+ {id:"scaliger",name:"Della Scala lords",years:"1262 – 1387",
+  who:"A local family of fairly modest origins. Their emblem was a ladder, a scala.",
+  how:"After the tyrant Ezzelino fell, Mastino I was elected captain of the people in 1262. The family turned the job into a hereditary lordship.",
+  left:["Their peak under Cangrande I: Dante at court, rule over Vicenza, Padua and Treviso.",
+   "Castelvecchio, Ponte Scaligero, the Arche tombs, the city walls, Sant’Anastasia, the Madonna Verona fountain.",
+   "Swallowtail battlements all over town.",
+   "They fell through brother-killing feuds; Milan’s Visconti took the city in 1387."]},
+ {id:"commune",name:"Free commune",years:"1100s – 1260s",
+  who:"Local merchants and nobles governing themselves through elected consuls.",
+  how:"Imperial power faded and the cities filled the gap. Verona joined the leagues against Emperor Frederick Barbarossa.",
+  left:["Torre dei Lamberti, Palazzo della Ragione and the tower-houses of feuding families.",
+   "Piazza Erbe as the market it still is.",
+   "The real Montecchi faction, named by Dante: Shakespeare’s Montagues.",
+   "The great earthquake of 1117, which brought down the Arena’s outer ring."]},
+ {id:"early",name:"Goths, Lombards, Franks",years:"489 – 1100s",
+  who:"Germanic peoples from beyond the Danube: Ostrogoths, then Lombards, then Franks.",
+  how:"Theodoric the Ostrogoth, sent by the eastern emperor to remove Odoacer, beat him at Verona in 489 and often lived here. The Lombards arrived in 569; their king Alboin was murdered in Verona in 572, by legend after making his wife Rosamund drink from her father’s skull. Charlemagne’s Franks took over in 774.",
+  left:["The pastissada legend, born from the battle of 489.",
+   "German epics where Theodoric is “Dietrich von Bern”. Bern is Verona.",
+   "Lombard graves under the Scavi Scaligeri, and the dog-masks echoed in Scaliger helmets.",
+   "The Indovinello veronese, a riddle that is one of the earliest written traces of Italian.",
+   "The roots of the great abbey of San Zeno."]},
+ {id:"roman",name:"Roman Verona",years:"1st c. BC – 5th c. AD",
+  who:"Before Rome: local peoples and the Cenomani, a Gallic tribe allied with Rome.",
+  how:"By alliance, not conquest. Latin rights in 89 BC, full citizenship in 49 BC. The spot mattered: here the Via Postumia, laid out in 148 BC from Genoa to Aquileia, crossed the Adige and met the road to the Alps.",
+  left:["The street grid. The decumanus (Corso Porta Borsari, Corso Sant’Anastasia) is the Via Postumia inside the walls; the cardo (Via Cappello, Via Leoni) crosses it at the forum, today’s Piazza Erbe.",
+   "The Arena, Teatro Romano, Ponte Pietra, Porta Borsari, Porta Leoni and the Arco dei Gavi.",
+   "The poet Catullus, born here."]}
 ];
-var PNAME={};PERIODS.forEach(function(p){PNAME[p.id]=p.name;});
-var COORDS={arena:[45.4390,10.9944],castel:[45.4399,10.9876],gavi:[45.4402,10.9889],borsari:[45.4423,10.9948],erbe:[45.4426,10.9970],costa:[45.4431,10.9978],signori:[45.4433,10.9986],arche:[45.4437,10.9993],lunch:[45.4431,10.9999],giulietta:[45.4419,10.9983],anastasia:[45.4450,10.9997],pietra:[45.4476,10.9993],sanpietro:[45.4483,11.0016],dinner:[45.4443,11.0004]};
+var PNAME={},PCLS={};LAYERS.forEach(function(p){PNAME[p.id]=p.name;PCLS[p.id]="b-"+p.id;});
+
+var COORDS={arena:[45.4390,10.9944],castel:[45.4399,10.9876],gavi:[45.4402,10.9889],borsari:[45.4420,10.9947],erbe:[45.4429,10.9972],costa:[45.4431,10.9978],signori:[45.4434,10.9983],scavi:[45.4438,10.9986],arche:[45.4435,10.9991],lunch:[45.4431,10.9997],giulietta:[45.4419,10.9984],leoni:[45.4403,10.9993],anastasia:[45.4451,10.9998],pietra:[45.4476,10.9993],sanpietro:[45.4483,11.0016],dinner:[45.4443,11.0005]};
 
 var STOPS=[
-{id:"arena",n:"I",time:"09:30",title:"Piazza Bra and the Arena",period:"roman",also:["venice","modern"],map:"Arena di Verona",
+{id:"arena",n:"I",time:"09:30",title:"Piazza Bra and the Arena",period:"roman",also:["commune","venice","modern"],
  walk:"Start here, coffee in hand.",
- see:"The Arena went up in the 1st century AD, just outside the Roman walls, and is older than the Colosseum. It is the third-largest Roman amphitheatre after the Colosseum and Capua, and held around 30,000 people. Its pink-and-white stone comes from the Valpolicella hills, the same ones that make the wine.",
- facts:["Only four arches of the outer ring survive. Locals call them l’Ala, “the wing”. The rest fell in the great earthquake of 1117, and for centuries afterwards the ring was used as a quarry.",
-  "A legend says the devil built the Arena in a single night, but the dawn bells rang before he finished, which is why the outer ring is missing.",
-  "Opera has filled it every summer since 1913.",
-  "Behind you, the Gran Guardia was begun under Venetian rule. The wide pavement along the cafés is the Liston, Verona’s promenade."],
+ see:"The Arena went up around 30 AD, just outside the Roman walls, and is older than the Colosseum. It is the third-largest Roman amphitheatre after the Colosseum and Capua, and held around 30,000 people for gladiator games. Its pink-and-white stone comes from the Valpolicella hills, the same ones that make the wine.",
+ facts:["When the city walls were rebuilt in a hurry in 265 AD, they were stretched to bring the Arena inside.",
+  "Only four arches of the outer ring survive. Locals call them l’Ala, “the wing”. The rest fell in the earthquake of 1117, and for centuries the ring served as a quarry.",
+  "A legend says the devil built the Arena in a single night, but the dawn bells rang before he finished, hence the missing ring.",
+  "In the Middle Ages it hosted jousts and judicial duels, and in 1278 a mass execution: well over a hundred Cathar heretics captured at Sirmione were burned here.",
+  "Under Venice the arcades were rented out as workshops and shops, and the city began fining stone thieves and repairing the steps.",
+  "Napoleon came to watch a bull-baiting show in 1805.",
+  "In 1913 the tenor Giovanni Zenatello staged Aida for Verdi’s centenary. Opera has filled the Arena every summer since; Maria Callas made her Italian debut here in 1947.",
+  "Behind you, the Gran Guardia was begun under Venice and Palazzo Barbieri, the city hall, under Austria. The wide pavement along the cafés is the Liston, Verona’s promenade."],
  look:{q:"Stand in front of the Ala and compare it with the rest of the Arena. How many storeys of arches does each have?",a:"The Ala has three; the surviving body has two. The vanished outer ring stood a whole storey taller than what you see today."},
  quiz:{q:"How many arches of the outer ring still stand?",opts:["2","4","8","16"],a:1,why:"Four. The 1117 earthquake and centuries of stone-robbing took the rest."}},
-{id:"castel",n:"II",time:"10:15",title:"Castelvecchio and Ponte Scaligero",period:"scaliger",also:["empire","modern"],map:"Castelvecchio Verona",
+{id:"castel",n:"II",time:"10:15",title:"Castelvecchio and Ponte Scaligero",period:"scaliger",also:["empire","modern"],
  walk:"About 8 minutes up Via Roma. The museum inside is optional (allow 1–1.5 h).",
- see:"Cangrande II della Scala built this fortress in 1354–56, with its own private bridge over the Adige. It was a stronghold for a lord who did not entirely trust his own city.",
+ see:"Cangrande II della Scala built this fortress in 1354–56, with its own private bridge over the Adige: a stronghold for a lord who did not entirely trust his own city.",
  facts:["Napoleon’s troops turned it into barracks and added a fort along two sides of the courtyard.",
   "In the 1920s museum director Antonio Avena made it look more medieval than it ever was, adding battlements and Gothic windows salvaged from other buildings.",
-  "From 1957 to 1975 the architect Carlo Scarpa did the opposite: he exposed the fakes and staged the collection like a theatre. His verdict: “Castelvecchio was all fake.”",
-  "Ponte Scaligero was blown up by retreating German troops on 25 April 1945 and rebuilt in 1950–51."],
+  "In November 1943 Mussolini’s new Fascist republic held its founding congress in this castle. In January 1944 it staged the trial of the leaders who had voted him out, among them his son-in-law Galeazzo Ciano. Five were shot at a fort outside the walls.",
+  "Ponte Scaligero was blown up by retreating German troops on 25 April 1945 and rebuilt in 1950–51.",
+  "From 1957 to 1975 the architect Carlo Scarpa exposed Avena’s fakes and staged the collection like a theatre. His verdict: “Castelvecchio was all fake.”"],
  look:{q:"Walk onto the bridge and study the battlements. What shape are they?",a:"Swallowtail merlons, the forked “M” shape. You will spot them on Scaliger buildings all over town."},
- quiz:{q:"Inside the museum stands the original equestrian statue of Cangrande I. What sits on his helmet?",opts:["A winged dog’s head","A ladder","A lion of St Mark","A bunch of grapes"],a:0,why:"A winged dog: Cangrande means “big dog”. The statue on his tomb outside is a copy of this one."}},
-{id:"gavi",n:"III",time:"11:00",title:"Arco dei Gavi and the Roman road",period:"roman",also:["empire"],map:"Arco dei Gavi Verona",
+ quiz:{q:"Inside the museum stands the original equestrian statue of Cangrande I. What sits on his helmet?",opts:["A winged dog’s head","A ladder","A lion of St Mark","A bunch of grapes"],a:0,why:"A winged dog: Cangrande means “big dog”. The statue on his tomb is a copy of this one."}},
+{id:"gavi",n:"III",time:"10:50",title:"Arco dei Gavi and the Via Postumia",period:"roman",also:["empire"],
  walk:"Right beside the castle.",
- see:"A 1st-century AD honorary arch paid for by a wealthy local family, the Gavii. It once straddled the main road leaving the city.",
- facts:["Napoleon’s engineers dismantled it in 1805 because it blocked military traffic. It lay in pieces until 1932, when it was rebuilt here, close to its original spot.",
+ see:"A 1st-century AD honorary arch paid for by a wealthy local family, the Gavii. It stood astride the Via Postumia, the consular road laid out in 148 BC from Genoa on one sea to Aquileia on the other.",
+ facts:["Verona exists because of that road: this is where it crossed the Adige and met the route north to the Alps.",
+  "Under the arch you can still see Roman paving stones, grooved by cart wheels.",
+  "Napoleon’s engineers dismantled the arch in 1805 because it blocked military traffic. It lay in pieces until 1932, when it was rebuilt here, close to its original spot.",
   "It is one of the rare Roman monuments signed by its architect.",
-  "From here to Porta Borsari you are walking the Roman decumanus maximus, today Corso Cavour and Corso Porta Borsari."],
+  "From here to Porta Borsari you walk the Postumia itself, today Corso Cavour."],
  look:{q:"Find the architect’s signature carved on the arch. Which famous name does he share?",a:"Vitruvius: Lucius Vitruvius Cerdo. A namesake, not the author of the famous treatise on architecture."},
  quiz:{q:"Why was the arch taken apart in 1805?",opts:["Earthquake damage","It blocked Napoleon’s military traffic","Venice sold the stone","To move it into a museum"],a:1,why:"The French army found it in the way. It took 127 years to put it back."}},
-{id:"borsari",n:"IV",time:"11:25",title:"Porta Borsari",period:"roman",also:[],map:"Porta Borsari Verona",
+{id:"borsari",n:"IV",time:"11:10",title:"Porta Borsari and the decumanus",period:"roman",also:[],
  walk:"Five minutes along Corso Cavour. Coffee break at Caffè Borsari, just inside.",
- see:"The main gate of Roman Verona, where the decumanus entered the city. What survives is the outer façade, in white Valpolicella stone.",
+ see:"The main gate of Roman Verona. Here the Via Postumia entered the walls and became the decumanus maximus, the main east–west street. What survives is the gate’s outer façade, in white Valpolicella stone.",
  facts:["The Romans called it Porta Iovia, after a nearby temple of Jupiter.",
   "The name Borsari is medieval: the bursarii were the officials who collected duties at the gate.",
   "The inscription records the city walls rebuilt in 265 AD under Emperor Gallienus.",
-  "The Roman street surface lies well below today’s paving: the whole centre has risen over the centuries."],
+  "Walk through it and keep straight: Corso Porta Borsari is the decumanus. The side streets still meet it at right angles, block after Roman block."],
  look:{q:"Count the small arched windows on each of the two upper storeys.",a:"Six per storey."},
  quiz:{q:"Who were the “borsari” the gate is named after?",opts:["Pickpockets","Customs officials","Leather-bag makers","Students"],a:1,why:"Customs officials, collecting duties on goods entering the city."}},
-{id:"erbe",n:"V",time:"11:50",title:"Piazza delle Erbe",period:"commune",also:["roman","venice"],map:"Piazza delle Erbe Verona",
- walk:"Straight on down Corso Porta Borsari.",
- see:"The square sits on top of the Roman forum. In the Middle Ages it became the heart of the free commune: market stalls, rival families’ towers, the town hall. It is still a market every day.",
+{id:"erbe",n:"V",time:"11:30",title:"Piazza delle Erbe",period:"commune",also:["roman","venice","modern"],
+ walk:"Straight on down the decumanus.",
+ see:"The square sits on top of the Roman forum, at the crossing of cardo and decumanus. In the Middle Ages it became the heart of the free commune: market stalls, rival families’ towers, the town hall. It is still a market every day.",
  facts:["The square is about 3.5 m above the Roman level. Roman paving survives in nearby courtyards and cellars.",
   "The fountain’s statue, Madonna Verona, is a Roman statue that Cansignorio della Scala reused for his fountain in 1368.",
   "The winged lion on the column marks Venetian rule, 1405–1797. It is not the original lion.",
-  "On the north side, the frescoed Case Mazzanti hint at how colourful the city once was. Verona was known as the “painted city”."],
+  "On the north side, the frescoed Case Mazzanti hint at how colourful the city once was.",
+  "On 14 November 1915 Austrian planes bombed the crowded market, killing around thirty people. The bronze statue in the corner, on Piazzetta XIV Novembre, remembers them."],
  game:"erbe",
  quiz:{q:"What was this square in Roman times?",opts:["The forum","The circus","A cemetery","The river port"],a:0,why:"The forum: Verona’s centre has stayed in the same place for two thousand years."}},
-{id:"costa",n:"VI",time:"12:20",title:"Arco della Costa and Torre dei Lamberti",period:"commune",also:[],map:"Arco della Costa Verona",
+{id:"costa",n:"VI",time:"12:00",title:"Arco della Costa and Torre dei Lamberti",period:"commune",also:[],
  walk:"Through the arch at the corner of the square.",
  see:"The Arco della Costa links the market square to the square of government. Hanging from it is a large bone, probably a whale rib, there since at least the 1700s.",
  facts:["Legend says the rib will fall on the first truly just person to walk beneath it. It is still up there.",
   "Nobody knows for sure why it’s there. One theory: a shop selling exotic goods hung it as a sign. Verona is about 120 km from the sea.",
   "The tower beside it was begun in 1172, when wealthy families competed by building tower-houses. Lightning took off the top in 1403; the octagonal belfry added in 1448–63 brought it to 84 m.",
   "Two historic bells: the Rengo, named after the arengo (the citizens’ assembly), called councils and the call to arms. The Marangona, from marangon, Veronese for carpenter, marked the end of the working day and rang for fires.",
-  "You can climb it, or take the lift. A good way to settle lunch, or to earn it."],
+  "You can climb it, or take the lift. A good way to earn lunch."],
  game:"costa",
  quiz:{q:"What does the Marangona bell’s name mean?",opts:["Carpenter","Marriage","Market","Morning"],a:0,why:"Carpenter: it told the craftsmen when to down tools."}},
-{id:"signori",n:"VII",time:"13:00",title:"Piazza dei Signori",period:"scaliger",also:["venice"],map:"Piazza dei Signori Verona",
+{id:"signori",n:"VII",time:"12:40",title:"Piazza dei Signori",period:"scaliger",also:["venice"],
  walk:"You’re already in it.",
  see:"The seat of power: first of the Della Scala lords, then of the Venetian governors.",
  facts:["The statue in the middle is Dante. Exiled from Florence, he found refuge at the court of Cangrande della Scala and praised him in the Paradiso.",
@@ -317,10 +467,18 @@ var STOPS=[
   "Look for a bocca: a slot carved in stone where citizens could post anonymous denunciations to the magistrates."],
  game:"bocca",
  quiz:{q:"Which famous exile found refuge with the Scaligeri?",opts:["Dante","Petrarch","Machiavelli","Galileo"],a:0,why:"Dante, who spent years of his exile in Verona."}},
-{id:"arche",n:"VIII",time:"13:15",title:"Arche Scaligere",period:"scaliger",also:[],map:"Arche Scaligere Verona",
- walk:"Two minutes, through the arch at the far corner.",
+{id:"scavi",n:"VIII",time:"12:55",title:"Scavi Scaligeri: the city under the city",period:"early",also:["roman","scaliger"],
+ walk:"Through the archway into the Cortile del Tribunale, the courtyard next door.",
+ see:"In the 1980s, while the old law courts were being restored, archaeologists dug beneath this courtyard and found Verona stacked in layers: Roman streets and house mosaics, graves from the Lombard centuries, medieval tower-houses and the foundations of the Scaliger palaces.",
+ facts:["It is the best place in town to see the idea behind this whole tour: each age built on the rubble of the last.",
+  "The site doubles as the city’s photography centre. It reopened in February 2026 after almost eleven years closed. If an exhibition is on, go down: the gangways run right over the excavations.",
+  "Even when it’s shut you can look in, through two big glass portholes in the courtyard paving and the skylights along Via Dante."],
+ look:{q:"Find the glass portholes and look straight down. How far below your feet is the Roman city?",a:"Roughly three metres: two thousand years of rubble, floods, rebuilding and repaving."},
+ quiz:{q:"Which of these was not found under this courtyard?",opts:["Roman mosaics","Lombard-era graves","Medieval tower-houses","An Egyptian obelisk"],a:3,why:"No obelisk. Everything else is down there, one layer above the other."}},
+{id:"arche",n:"IX",time:"13:10",title:"Arche Scaligere",period:"scaliger",also:["early"],
+ walk:"Two minutes, back out and round the corner.",
  see:"The Gothic tombs of the Della Scala family, who ruled Verona until 1387. They chose to be buried in the open street, beside their family church of Santa Maria Antica.",
- facts:["Their names are a kennel: Cangrande (“big dog”), Mastino (“mastiff”), Cansignorio (“lord dog”). Their arms show a ladder, a scala. Dogs and ladders are everywhere here.",
+ facts:["Their names are a kennel: Cangrande (“big dog”), Mastino (“mastiff”), Cansignorio (“lord dog”). Their arms show a ladder. Dogs and ladders are everywhere here.",
   "Cangrande I died in 1329, probably poisoned. His tomb above the church door shows him smiling on horseback. That statue is a copy; the original is in Castelvecchio.",
   "Mastino II hides his face under a dog-head helmet, a nod to the Lombard warriors who wore dog masks to frighten their enemies.",
   "The wrought-iron fence from around 1382 is a mesh of tiny ladders.",
@@ -328,36 +486,49 @@ var STOPS=[
  look:{q:"How many dogs support Cangrande’s sarcophagus?",a:"Four, each showing the family coat of arms."},
  quiz:{q:"Scala is the ladder in the coat of arms. What is a mastino?",opts:["A mastiff","A master","A ship’s mast","A marble"],a:0,why:"A mastiff. The family really committed to the dog theme."}},
 {meal:true,id:"lunch",time:"13:30",title:"Lunch at Osteria al Duca",text:"In the Montecchi house. Bigoli con l’arna or gnocchi to start, then pastissada de caval. A glass of Valpolicella is the obvious choice."},
-{id:"giulietta",n:"IX",time:"15:00",title:"Juliet’s House and a Roman house under a shop",period:"modern",also:["roman"],map:"Casa di Giulietta Verona",
- walk:"About 5 minutes to Via Cappello, then a short detour onto Via Mazzini.",
+{id:"giulietta",n:"X",time:"14:50",title:"Juliet’s House, on the cardo",period:"modern",also:["roman","commune"],
+ walk:"About 5 minutes to Via Cappello. You are now on the Roman cardo, the main north–south street.",
  see:"A real medieval house of the Dal Cappello family, a name close enough to Shakespeare’s Capulets to launch a legend. The rest is 20th-century stagecraft.",
  facts:["The famous balcony was added in the 1930s by Antonio Avena, the same director who “medievalised” Castelvecchio, assembled from 14th-century marble pieces kept at the museum.",
   "The bronze Juliet is by Nereo Costantini. The courtyard statue is a copy, and even the copy has been rubbed so much for luck that it wore through.",
   "Since December 2025 entering the courtyard has, at least for a period, required a museum ticket. Check before going.",
-  "On Via Mazzini, look down through the glass floor of the Benetton store: excavations in 2013–14 found a Roman house right under the shop."],
+  "Optional detour: on Via Mazzini, the glass floor of the Benetton store shows a Roman house found under the shop in 2013–14."],
  quiz:{q:"When did Juliet get her balcony?",opts:["The 1300s","1597, when the play was printed","The 1930s","The 1990s"],a:2,why:"The 1930s. The romance is old; the balcony isn’t."}},
-{id:"anastasia",n:"X",time:"15:40",title:"Sant’Anastasia",period:"scaliger",also:[],map:"Basilica di Santa Anastasia Verona",
- walk:"About 10 minutes back past Piazza Erbe.",
- see:"The great Gothic church of the Dominicans, begun in the late 1200s during the Scaliger era and built over more than a century. It is the largest church in Verona.",
+{id:"leoni",n:"XI",time:"15:10",title:"Porta Leoni and the cardo",period:"roman",also:[],
+ walk:"Three minutes further down Via Cappello, which becomes Via Leoni.",
+ see:"The south gate of Roman Verona, at the end of the cardo maximus. Only half of its inner face survives, attached to the side of a later building.",
+ facts:["It is two gates in one: a brick gate from the 1st century BC, when Verona became a Roman town, and a white stone façade added in front of it about a century later. Both skins are visible.",
+  "In the middle of the street an open excavation shows the Roman street level and the base of one of the gate’s towers, a 16-sided polygon.",
+  "The name is medieval, from a Roman tomb carved with lions that stood nearby.",
+  "Cardo and decumanus crossed at the forum. Turn round and follow this street north and you are back in Piazza Erbe: the same crossing has been the centre of town for 2,000 years."],
+ look:{q:"Look at the gate from the side. Can you tell the older brick gate from the stone one added later?",a:"The brick structure, with its own openings, sits just behind the white stone façade."},
+ game:"grid",
+ quiz:{q:"In a Roman town plan, which street is the cardo?",opts:["The north–south axis","The east–west axis","The road around the walls","The aqueduct"],a:0,why:"The cardo runs roughly north–south and the decumanus east–west. In Verona the whole grid is tilted to fit the river bend."}},
+{id:"anastasia",n:"XII",time:"15:35",title:"Sant’Anastasia",period:"scaliger",also:["roman"],
+ walk:"Ten minutes north. Go by the river and the porticoes of Via Sottoriva if you like.",
+ see:"The great Gothic church of the Dominicans, begun in the late 1200s during the Scaliger era and built over more than a century. It is the largest church in Verona, and it stands at the far end of the decumanus.",
  facts:["Near the entrance, two hunchbacks, i gobbi, carry the holy-water stoups on their backs.",
-  "Inside, look for Pisanello’s fresco of Saint George and the Princess, a masterpiece of Late Gothic painting."],
+  "Inside, look for Pisanello’s fresco of Saint George and the Princess, a masterpiece of Late Gothic painting.",
+  "Corso Sant’Anastasia, in front of the church, is the last stretch of the decumanus before the river."],
  look:{q:"Find both gobbi. Are they twins?",a:"No. They were carved at different times by different hands; compare their faces and clothes."}},
-{id:"pietra",n:"XI",time:"16:05",title:"Ponte Pietra",period:"roman",also:["modern"],map:"Ponte Pietra Verona",
+{id:"pietra",n:"XIII",time:"16:00",title:"Ponte Pietra",period:"roman",also:["venice","modern"],
  walk:"Five minutes to the river.",
  see:"Verona’s oldest bridge, and the only one that goes back to Roman times. Every arch belongs to a different chapter.",
- facts:["On the night of 24–25 April 1945, retreating German troops blew up all of Verona’s bridges, this one included.",
+ facts:["A second Roman bridge, the Pons Postumius, carried the Via Postumia over the river a little downstream. Nothing of it stands today.",
+  "On the night of 24–25 April 1945, retreating German troops blew up all of Verona’s bridges, this one included.",
   "In 1957–59 it was rebuilt with the original blocks fished out of the Adige, using old drawings and photographs to put each one back. It reopened on 8 March 1959.",
   "The two arches on the theatre side were Roman, in white stone. The brick arches are medieval rebuilds after floods; one pier is a Venetian reconstruction from the 1500s.",
-  "The tall river walls you see along the Adige went up after the catastrophic flood of 1882, and changed how the city lives with its river."],
+  "The tall river walls along the Adige went up after the catastrophic flood of 1882, and changed how the city lives with its river."],
  game:"bridge",
- quiz:{q:"How was the bridge rebuilt after 1945?",opts:["In new concrete","With its own stones recovered from the river","With stone taken from the Arena","It was never rebuilt"],a:1,why:"Stone by stone, from the riverbed. Its method became a model for post-war reconstruction elsewhere in Italy."}},
-{id:"sanpietro",n:"XII",time:"16:20",title:"Teatro Romano and Castel San Pietro at sunset",period:"roman",also:["empire"],map:"Castel San Pietro Verona",
+ quiz:{q:"How was the bridge rebuilt after 1945?",opts:["In new concrete","With its own stones recovered from the river","With stone taken from the Arena","It was never rebuilt"],a:1,why:"Stone by stone, from the riverbed."}},
+{id:"sanpietro",n:"XIV",time:"16:15",title:"Teatro Romano and Castel San Pietro at sunset",period:"roman",also:["early","empire"],
  walk:"Across the bridge. Up by the funicular or about 10 minutes of steps.",
  see:"Verona began on this side of the river, and the Romans cut their theatre into this hillside. The view from the top shows why: the Adige’s tight loop made a natural fortress and a crossing on the road to the Alps.",
- facts:["The “castle” on top is a 19th-century Austrian barracks, built on older fortifications.",
+ facts:["Tradition places Theodoric’s palace on this hill.",
+  "The “castle” on top is a 19th-century Austrian barracks, built on older fortifications.",
   "Under Austria, Verona was one of the four fortress-cities of the Quadrilatero.",
-  "At sunset the brick and marble of the city go pink and the river turns green. Stay for it."],
- look:{q:"From the terrace, find the Torre dei Lamberti and the Arena’s Ala.",a:"The tower is the tallest thing in the centre. The Ala pokes up further south, beyond Piazza Erbe."},
+  "At sunset the brick and marble go pink and the river turns green. Stay for it."],
+ look:{q:"From the terrace, find the Torre dei Lamberti and the Arena’s Ala. Then trace the straight line of the decumanus.",a:"The tower is the tallest thing in the centre and the Ala pokes up further south. The decumanus is the ruler-straight street aimed at you from Sant’Anastasia."},
  quiz:{q:"Which of these was not one of the four Quadrilatero fortresses?",opts:["Peschiera","Mantua","Legnago","Padua"],a:3,why:"Padua. The four were Verona, Peschiera, Mantua and Legnago."}},
 {meal:true,id:"dinner",time:"17:30",title:"Ombra on Via Sottoriva, then dinner",text:"Back over the river to the porticoes of Via Sottoriva for an ombra. For dinner, stay at Osteria Sottoriva or head to Antica Bottega del Vino or Trattoria al Bersagliere. In November, this is the evening for lesso con pearà."}
 ];
@@ -367,19 +538,22 @@ var MATCH={
     items:[["caval","horse"],["arna","duck"],["bigat","caterpillar"],["pearà","peppered"],["ombra","a glass of wine"],["marangon","carpenter"]]},
   erbe:{title:"Period spotter",hint:"Four things in one square, four different centuries. Which layer does each belong to?",
     items:[["Madonna Verona statue","Roman Verona"],["Torre dei Lamberti","Free commune"],["Fountain basin (1368)","Della Scala lords"],["Lion on the column","Venetian Republic"]]},
+  grid:{title:"Cardo or decumanus?",hint:"You have now walked both Roman axes. Sort the streets.",
+    items:[["Corso Porta Borsari","Decumanus (and Via Postumia)"],["Via Cappello","Cardo"],["Corso Sant’Anastasia","Decumanus (the far end)"],["Via Leoni","Cardo (the south end)"]]},
   bridge:{title:"Read the bridge",hint:"Look at Ponte Pietra from the bank. Who built which part?",
     items:[["White stone arches on the theatre side","Romans"],["Red brick arches","Medieval rebuilders after floods"],["One reworked stone pier","Venetians in the 1500s"],["The whole bridge, reassembled","Restorers in 1957–59"]]}
 };
 
 var EVENTS=[
-  ["The Arena is built","1st c. AD"],
+  ["The Via Postumia reaches the Adige","148 BC"],
+  ["The Arena is built","about 30 AD"],
   ["Theodoric defeats Odoacer at Verona","489"],
   ["An earthquake brings down the Arena’s outer ring","1117"],
-  ["The Lamberti begin their tower","1172"],
   ["Cangrande II builds Castelvecchio","1354"],
-  ["Verona joins the Venetian Republic","1405"],
+  ["Verona gives itself to Venice","1405"],
   ["The Pasque Veronesi revolt against the French","1797"],
   ["Melegatti patents the pandoro","1894"],
+  ["Bombs fall on the market in Piazza Erbe","1915"],
   ["Ponte Pietra reopens","1959"]
 ];
 
@@ -389,14 +563,19 @@ var RIB=["The rib stays put. Join the club: nobody in three centuries has been j
   "Still hanging. Try again after lunch, when you’re a better person.",
   "Nothing. The rib has very high standards."];
 
+/* ---------- State ---------- */
 var state=load();
 function load(){try{var s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&typeof s==="object")return fill(s);}catch(e){}return fill({});}
-function fill(s){s.stamps=s.stamps||{};s.quiz=s.quiz||{};s.games=s.games||{};s.order=s.order||null;return s;}
+function fill(s){s.stamps=s.stamps||{};s.quiz=s.quiz||{};s.games=s.games||{};s.order=s.order||null;s.cur=s.cur||0;s.layer=s.layer||"roman";return s;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function $(id){return document.getElementById(id);}
 function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function realStops(){return STOPS.filter(function(s){return !s.meal;});}
-function chipStyle(p){var map={modern:"b-modern",empire:"b-empire",venice:"b-venice",scaliger:"b-scaliger",commune:"b-commune",roman:"b-roman"};return map[p];}
+function byId(id){return STOPS.filter(function(x){return x.id===id;})[0];}
+function idxOf(id){for(var i=0;i<STOPS.length;i++)if(STOPS[i].id===id)return i;return 0;}
+function label(s){return (s.n?s.n+". ":"")+s.title;}
+function nextId(){var r=realStops().filter(function(s){return !state.stamps[s.id];})[0];return r?r.id:null;}
 
 function score(){
   var pts=0;
@@ -406,184 +585,283 @@ function score(){
   return pts;
 }
 function renderScore(){
-  document.getElementById("score").textContent=score();
+  var p=score();$("score").textContent=p;
   var n=realStops().filter(function(s){return state.stamps[s.id];}).length;
-  document.getElementById("stampcount").textContent="and "+n+" of "+realStops().length+" stops stamped";
+  var title=p>=32?"Signore di Verona":p>=22?"Cittadino onorario":p>=10?"Apprendista":"Forestiero";
+  var note=p>=32?"Cangrande would have given you a tower.":p>=22?"Honorary citizen. The rib still won’t fall for you.":p>=10?"Apprentice. A few more stops and the marangona rings for you.":"A stranger at the gate. The borsari are checking your bags.";
+  $("rank").innerHTML='<strong>'+title+'</strong>'+p+' points, '+n+' of '+realStops().length+' stops stamped. '+note;
 }
 
+/* ---------- Views ---------- */
+var view="story";
+function go(v,keepScroll){
+  if(VIEWS.indexOf(v)<0)v="story";
+  if(view==="story"&&v!=="story"&&fplaying)fToggle();
+  view=v;
+  VIEWS.forEach(function(x){$("v-"+x).hidden=x!==v;});
+  document.querySelectorAll(".tabs button").forEach(function(b){if(b.dataset.go===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  if(v==="map")renderMap();
+  if(v==="walk")renderWalk();
+  if(v==="finale"){renderScore();renderOrder();}
+  if(!keepScroll)window.scrollTo(0,0);
+  try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v);}catch(e){try{location.hash=v;}catch(e2){}}
+}
+window.addEventListener("hashchange",function(){var h=location.hash.replace("#","");if(h&&h!==view)go(h);});
+
+/* ---------- Story: strata and layer panel ---------- */
+function stopsOf(pid){return realStops().filter(function(s){return s.period===pid||s.also.indexOf(pid)>-1;});}
 function renderStrata(){
-  var el=document.getElementById("strata");
-  el.innerHTML=PERIODS.map(function(p){
-    var stops=realStops().filter(function(s){return s.period===p.id;});
-    var pips=stops.map(function(s){return '<span class="pip'+(state.stamps[s.id]?' on':'')+'" title="'+esc(s.title)+'"></span>';}).join("");
-    var target=stops.length?stops[0].id:(realStops().filter(function(s){return s.also.indexOf(p.id)>-1;})[0]||{}).id;
-    return '<button class="band '+chipStyle(p.id)+'" data-jump="'+(target||"")+'"><span><span class="bname">'+esc(p.name)+'</span><span class="byears">'+esc(p.years)+'</span></span><span class="pips" aria-label="'+stops.length+' stops">'+pips+'</span></button>';
+  $("strata").innerHTML=LAYERS.map(function(p){
+    var prim=realStops().filter(function(s){return s.period===p.id;});
+    var pips=prim.map(function(s){return '<span class="pip'+(state.stamps[s.id]?' on':'')+'"></span>';}).join("");
+    return '<button class="band '+PCLS[p.id]+'" data-layer="'+p.id+'" aria-expanded="'+(state.layer===p.id)+'"><span><span class="bname">'+esc(p.name)+'</span><span class="byears">'+esc(p.years)+'</span></span><span class="pips">'+pips+'</span></button>';
   }).join("");
 }
+function renderLayer(){
+  var i=0;LAYERS.forEach(function(p,k){if(p.id===state.layer)i=k;});
+  var p=LAYERS[i],older=LAYERS[i+1],newer=LAYERS[i-1];
+  var links=stopsOf(p.id).map(function(s){return '<button data-stopid="'+s.id+'">'+esc(s.n+". "+s.title.split(":")[0].split(" and ")[0])+'</button>';}).join("");
+  $("layer").innerHTML='<div class="layer"><h3>'+esc(p.name)+'</h3><p class="yrs">'+esc(p.years)+'</p><dl><dt>Who they were</dt><dd>'+esc(p.who)+'</dd><dt>How they got in</dt><dd>'+esc(p.how)+'</dd><dt>What they left</dt><dd><ul>'+p.left.map(function(l){return '<li>'+esc(l)+'</li>';}).join("")+'</ul></dd></dl>'+
+    (links?'<p style="margin:.9rem 0 0;font-weight:600">See it on the walk</p><div class="stoplinks">'+links+'</div>':'')+
+    '<div class="pager"><button class="btn ghost" '+(older?'data-layer="'+older.id+'"':'disabled')+'>Earlier</button><button class="btn ghost" '+(newer?'data-layer="'+newer.id+'"':'disabled')+'>Later</button></div></div>';
+}
 
+/* ---------- Film ---------- */
+var RIV="M40 430 C150 380 215 300 270 232 C330 155 410 96 486 112 C566 130 606 204 594 284 C584 352 560 424 604 500";
+function T(x,y,txt,cls,t,anchor){return '<text x="'+x+'" y="'+y+'" class="'+cls+' a-fade" style="--t:'+t+'s"'+(anchor?' text-anchor="'+anchor+'"':'')+'>'+txt+'</text>';}
+function BG(c){return '<rect width="800" height="500" fill="'+c+'"/>';}
+function river(draw){return '<path d="'+RIV+'" class="f-river'+(draw?' a-draw':'')+'" pathLength="1"'+(draw?' style="--d:3s"':'')+'/>';}
+function gridLines(anim){var s="",k=0,x,y;
+  for(x=360;x<=520;x+=40){s+='<path d="M'+x+' 190V410" class="f-grid'+(anim?' a-draw':'')+'" pathLength="1" style="--t:'+(0.3+k*0.12)+'s;--d:.7s"/>';k++;}
+  for(y=190;y<=410;y+=44){s+='<path d="M340 '+y+'H540" class="f-grid'+(anim?' a-draw':'')+'" pathLength="1" style="--t:'+(0.3+k*0.12)+'s;--d:.7s"/>';k++;}
+  return s;}
+function star(R,r,n){var p=[],i,a,rad;for(i=0;i<n*2;i++){a=Math.PI*i/n-Math.PI/2;rad=i%2?r:R;p.push((Math.cos(a)*rad).toFixed(1)+","+(Math.sin(a)*rad).toFixed(1));}return p.join(" ");}
+var SCENES=[
+function(){return BG("#EDE6DA")+'<ellipse cx="660" cy="120" rx="92" ry="50" fill="#C9CDB0" class="a-fade" style="--t:1.6s"/>'+T(660,128,"San Pietro hill","f-lab",2,"middle")+river(true)+T(430,236,"VERONA","f-year",2.8,"middle")+T(430,274,"Two thousand years in a minute","f-lab",3.4,"middle");},
+function(){return BG("#EFE7D8")+river()+gridLines(true)+
+  '<path d="M110 278H690" class="f-road a-draw" pathLength="1" style="--t:2.2s;--d:1.4s"/>'+T(112,264,"Via Postumia","f-lab",3)+
+  '<path d="M440 170V430" class="f-road a-draw" pathLength="1" style="--t:3.3s;--d:1s"/>'+T(452,166,"cardo","f-lab",3.9)+T(610,264,"decumanus","f-lab",3.2)+
+  '<g transform="translate(440 278)"><rect x="-17" y="-15" width="34" height="30" fill="#8E2B2B" class="a-pop" style="--t:4.3s"/></g>'+T(464,318,"forum","f-lab",4.5)+
+  '<g transform="translate(318 452)"><g class="a-pop" style="--t:5s"><ellipse rx="48" ry="29" fill="#D8CCB6" stroke="#6B5F63" stroke-width="3"/><ellipse rx="24" ry="13" fill="#EFE7D8" stroke="#6B5F63" stroke-width="2"/></g></g>'+T(318,410,"Arena","f-lab",5.4,"middle")+
+  T(40,62,"89 BC: Rome","f-big",.2);},
+function(){var s=BG("#E3E0D2")+river()+'<g opacity=".3">'+gridLines(false)+'</g>'+
+  '<rect x="335" y="178" width="220" height="250" rx="26" class="f-wall a-draw" pathLength="1" style="--t:.4s;--d:1.6s"/>'+
+  '<g transform="translate(445 280)"><polygon points="-42,20 -42,-14 -22,6 0,-26 22,6 42,-14 42,20" fill="#B38B3A" class="a-drop" style="--t:1.6s"/></g>'+T(445,362,"489","f-year",2.2,"middle");
+  [["489 Ostrogoths","#5C6B4A"],["569 Lombards","#7A5C3A"],["774 Franks","#2F5D7C"]].forEach(function(b,i){
+    s+='<g class="a-fade" style="--t:'+(3+i*.9)+'s"><rect x="36" y="'+(40+i*56)+'" width="230" height="44" rx="6" fill="'+b[1]+'"/><text x="52" y="'+(70+i*56)+'" class="f-labw">'+b[0]+'</text></g>';});
+  return s;},
+function(){var s=BG("#E9E2DC")+'<rect x="0" y="376" width="800" height="6" fill="#6B5F63"/>'+T(50,190,"1117","f-year",.4)+'<g class="a-shake" style="--t:1.2s">';
+  var c,r;for(c=0;c<9;c++){s+='<g'+(c>3?' class="a-fall" style="--t:'+(2.1+(c-4)*.16)+'s"':'')+'><rect x="'+(50+c*34)+'" y="220" width="34" height="52" fill="#CFC2A8"/><rect x="'+(54+c*34)+'" y="228" width="26" height="44" rx="13" fill="#A79679"/></g>';}
+  s+='<rect x="50" y="272" width="306" height="104" fill="#D8CCB6"/>';
+  for(c=0;c<9;c++)for(r=0;r<2;r++)s+='<rect x="'+(54+c*34)+'" y="'+(280+r*50)+'" width="26" height="42" rx="13" fill="#A79679"/>';
+  s+='</g>'+T(52,420,"l’Ala: four arches left","f-lab",3.6)+T(430,62,"The free commune","f-big",3.8);
+  [120,190,150,250,140].forEach(function(h,i){var x=430+i*64;
+    s+='<g class="a-rise" style="--t:'+(4.2+i*.3)+'s"><rect x="'+x+'" y="'+(376-h)+'" width="42" height="'+h+'" fill="'+(i%2?"#A4543F":"#964A37")+'"/>'+
+     (i===3?'<rect x="'+x+'" y="'+(376-h+40)+'" width="42" height="12" fill="#D8CCB6"/><rect x="'+x+'" y="'+(376-h+80)+'" width="42" height="12" fill="#D8CCB6"/><rect x="'+x+'" y="'+(376-h+120)+'" width="42" height="12" fill="#D8CCB6"/>':'')+
+     '<rect x="'+(x+15)+'" y="'+(376-h+14)+'" width="12" height="18" rx="6" fill="#3A2420"/></g>';});
+  s+='<polygon points="'+(622+6)+',126 '+(622+36)+',126 '+(622+42)+',96 '+(622+21)+',78 622,96" fill="#D8CCB6" stroke="#964A37" stroke-width="3" class="a-fade" style="--t:5.9s"/>';
+  return s;},
+function(){var s=BG("#EADFD6")+'<rect y="400" width="800" height="100" fill="#7FB2C6"/>'+T(40,74,"1262","f-year",.2)+T(40,112,"The Della Scala: lords of the ladder","f-lab",1);
+  s+='<g class="a-rise" style="--t:.4s"><rect x="60" y="270" width="330" height="130" fill="#964A37"/>';var x;
+  for(x=60;x<=368;x+=28)s+='<polygon points="'+x+',270 '+x+',246 '+(x+10)+',258 '+(x+20)+',246 '+(x+20)+',270" fill="#964A37"/>';
+  s+='<rect x="190" y="170" width="76" height="230" fill="#8A4533"/>';
+  for(x=190;x<=246;x+=28)s+='<polygon points="'+x+',170 '+x+',146 '+(x+10)+',158 '+(x+20)+',146 '+(x+20)+',170" fill="#8A4533"/>';
+  s+='<path d="M210 400V350a18 18 0 0 1 36 0V400Z" fill="#3A2420"/></g>';
+  s+='<g class="a-fade" style="--t:1.8s"><rect x="390" y="352" width="390" height="50" fill="#964A37"/>';
+  for(x=390;x<=760;x+=28)s+='<polygon points="'+x+',352 '+x+',334 '+(x+10)+',343 '+(x+20)+',334 '+(x+20)+',352" fill="#964A37"/>';
+  s+='<path d="M402 402Q445 356 488 402Z" fill="#EADFD6"/><path d="M515 402Q572 350 630 402Z" fill="#EADFD6"/><path d="M656 402Q704 356 752 402Z" fill="#EADFD6"/></g>';
+  s+='<g transform="translate(640 150)"><path d="M-52 -62H52V10Q52 62 0 84Q-52 62 -52 10Z" fill="#8E2B2B" class="a-pop" style="--t:2.6s"/>';
+  s+='<path d="M-18 -46V56" stroke="#F3EBDD" stroke-width="6" fill="none" class="a-draw" pathLength="1" style="--t:3.2s;--d:.6s"/><path d="M18 -46V56" stroke="#F3EBDD" stroke-width="6" fill="none" class="a-draw" pathLength="1" style="--t:3.4s;--d:.6s"/>';
+  [-30,-6,18,42].forEach(function(y,i){s+='<path d="M-18 '+y+'H18" stroke="#F3EBDD" stroke-width="6" fill="none" class="a-draw" pathLength="1" style="--t:'+(3.8+i*.2)+'s;--d:.3s"/>';});
+  s+='</g>'+T(640,270,"Cangrande, the Big Dog","f-lab",4.8,"middle");return s;},
+function(){var s=BG("#DCE7EC")+'<rect y="430" width="800" height="70" fill="#C9BFAF"/>'+T(40,74,"1405","f-year",.2)+T(40,112,"Verona gives itself to Venice","f-lab",.9);
+  var cols=["#C97B63","#E0B866","#8FA98B","#D9A6A0","#9DB7C9","#E3C7A0","#B98BA5"],hs=[170,210,150,190,160,220,180];
+  hs.forEach(function(h,i){var x=20+i*110,y=430-h,r,c;s+='<g class="a-rise" style="--t:'+(1.2+i*.22)+'s"><rect x="'+x+'" y="'+y+'" width="100" height="'+h+'" fill="'+cols[i]+'"/><rect x="'+(x-4)+'" y="'+y+'" width="108" height="8" fill="#6B5F63"/>';
+    for(r=0;r<3;r++)for(c=0;c<2;c++)s+='<rect x="'+(x+20+c*40)+'" y="'+(y+24+r*42)+'" width="18" height="26" rx="9" fill="#2B2226" opacity=".4"/>';s+='</g>';});
+  s+='<g class="a-rise" style="--t:3.2s"><rect x="389" y="210" width="22" height="220" fill="#F3EFE8" stroke="#8B8178" stroke-width="2"/><rect x="377" y="200" width="46" height="12" fill="#F3EFE8" stroke="#8B8178" stroke-width="2"/></g>';
+  s+='<g transform="translate(400 176)"><g class="a-drop" style="--t:4.1s"><polygon points="-8,-10 -44,-48 0,-32 10,-12" fill="#9A7430"/><ellipse rx="34" ry="15" fill="#B38B3A"/><circle cx="28" cy="-10" r="17" fill="#9A7430"/><circle cx="35" cy="-12" r="12" fill="#B38B3A"/><rect x="-26" y="8" width="8" height="16" fill="#B38B3A"/><rect x="18" y="8" width="8" height="16" fill="#B38B3A"/><path d="M-33 0q-20 -6 -17 -26" stroke="#B38B3A" stroke-width="5" fill="none"/></g></g>';
+  return s;},
+function(){var s=BG("#E6E2DA")+'<rect width="800" height="500" fill="#EAD9A0" class="a-fade" style="--t:1.6s"/><path d="'+RIV+' L40 500Z" fill="#C7D2EE" class="a-fade" style="--t:1.6s"/>'+river()+
+  T(40,62,"1797","f-year",.2)+T(40,100,"The Pasque Veronesi: a revolt against Napoleon, crushed","f-lab",.7)+
+  T(420,300,"France","f-big",2,"middle")+T(696,250,"Austria","f-big",2.3,"middle")+T(420,334,"1801–1805: the river is a border","f-lab",2.8,"middle");
+  [[170,200],[350,150],[610,60],[720,400],[260,470],[500,460]].forEach(function(p,i){s+='<g transform="translate('+p[0]+' '+p[1]+')"><polygon points="'+star(30,13,5)+'" fill="#5F6468" class="a-pop" style="--t:'+(4.4+i*.22)+'s"/></g>';});
+  s+=T(420,420,"1815–1866: Austria’s fortress","f-lab",4.6,"middle");return s;},
+function(){var s=BG("#EFE9E2")+'<g class="a-slide"><rect width="267" height="14" fill="#3D8B5A"/><rect x="267" width="266" height="14" fill="#F6F3EE"/><rect x="533" width="267" height="14" fill="#C0443A"/></g>'+T(40,86,"1866","f-year",.4)+T(40,124,"Verona becomes Italian","f-lab",1);
+  s+='<g transform="translate(240 320)"><g class="a-pop" style="--t:1.6s"><ellipse rx="150" ry="92" fill="#D8CCB6" stroke="#6B5F63" stroke-width="3"/><ellipse rx="114" ry="68" fill="#C9B79C"/><ellipse rx="78" ry="43" fill="#BFAE92"/><ellipse rx="44" ry="20" fill="#EFE9E2"/></g></g>';
+  [180,225,270,310].forEach(function(x,i){s+='<text x="'+x+'" y="300" font-size="42" fill="#6E1F33" class="a-float" style="--t:'+(2.6+i*.55)+'s">♪</text>';});
+  s+=T(240,456,"Opera since 1913","f-lab",2.8,"middle");
+  s+='<g transform="translate(610 300)"><g class="a-spin" style="--t:3.8s"><polygon points="'+star(96,64,8)+'" fill="#E8C56A" stroke="#B38B3A" stroke-width="4"/><polygon points="'+star(56,37,8)+'" fill="#F1D98F"/><circle r="14" fill="#FFF8E6"/></g></g>'+T(610,440,"Pandoro, 1894","f-lab",4.6,"middle");return s;},
+function(){var s=BG("#2B2A2E")+'<rect y="390" width="800" height="110" fill="#35586A"/><rect x="0" y="330" width="110" height="170" fill="#4A4648"/><rect x="690" y="330" width="110" height="170" fill="#4A4648"/>';
+  [210,340,470,600].forEach(function(x){s+='<rect x="'+x+'" y="330" width="34" height="92" fill="#A39A8C"/>';});
+  for(var i=0;i<10;i++)s+='<rect x="'+(110+i*58)+'" y="296" width="56" height="34" fill="'+(i<4?"#D8CCB6":"#964A37")+'" stroke="#2B2A2E" stroke-width="2" class="a-blast" style="--t:'+((i%3)*.12)+'s"/>';
+  s+='<rect width="800" height="500" fill="#FFF3D6" class="a-flash"/>'+
+   T(40,60,"1915: bombs fall on the market in Piazza Erbe","f-labw",.3)+T(40,96,"1943–45: occupation, air raids, deportations","f-labw",1)+T(40,132,"25 April 1945: every bridge is blown up","f-labw",1.8)+T(400,236,"1959: rebuilt stone by stone","f-bigw",7,"middle");return s;},
+function(){var s=BG("#EEEAE7"),cols={roman:["#D8CCB6","#2B2226"],early:["#5C6B4A","#fff"],commune:["#964A37","#fff"],scaliger:["#8E2B2B","#fff"],venice:["#2F5D7C","#fff"],empire:["#C7A86A","#2B2226"],modern:["#5F6468","#fff"]};
+  LAYERS.slice().reverse().forEach(function(p,i){var y=412-i*46;s+='<g class="a-slide" style="--t:'+(i*.3)+'s"><rect x="140" y="'+y+'" width="520" height="42" fill="'+cols[p.id][0]+'"/><text x="160" y="'+(y+28)+'" class="f-band" fill="'+cols[p.id][1]+'">'+esc(p.name)+'</text></g>';});
+  s+=T(400,74,"Seven layers, one city","f-big",2.8,"middle");return s;}
+];
+var DUR=[6000,8500,8000,8500,7500,7500,8500,7500,10500,7000];
+var CAPS=[
+ "A river bends in a tight loop below a low hill. A good place to cross, an easy place to defend.",
+ "Rome arrives by alliance, not conquest. Where the Via Postumia crosses the Adige it lays out a grid: decumanus, cardo, a forum at the crossing, and an arena for 30,000 outside the walls.",
+ "489: Theodoric the Ostrogoth wins the city in battle. After the Goths come the Lombards, then Charlemagne’s Franks. German poets will call the place Bern.",
+ "1117: an earthquake drops the Arena’s outer ring, leaving four arches. The citizens start ruling themselves, and rich families race to build the tallest tower.",
+ "1262: the Della Scala take charge. The lords of the ladder, with names like Big Dog and Mastiff, build a castle, a fortified bridge and their tombs in the open street. Dante is their guest.",
+ "1405: tired of war, Verona hands its keys to Venice. Four quiet centuries follow: a lion on a column, painted façades, new gates and bastions.",
+ "1797: Napoleon. Verona rises against the French at Easter and loses. For four years the Adige is a border between France and Austria. Then Austria turns the city into a fortress.",
+ "1866: Verona joins Italy. A great flood, new river walls, a star-shaped cake in 1894, and from 1913, opera under the open sky.",
+ "Two world wars reach the city: bombs on the market in 1915, occupation and air raids in 1943–45, and every bridge blown up on the last night. Ponte Pietra is fished out of the river and rebuilt.",
+ "Seven layers, each built on the last. Now go and walk through them."
+];
+var fcur=0,fplaying=false,fstarted=false,fdone=false,ftimer=null,ft0=0,frem=0;
+function buildFilm(){
+  $("stagebox").innerHTML='<svg viewBox="0 0 800 500" class="stage-svg" role="img" aria-label="Animated story of Verona in ten scenes">'+SCENES.map(function(fn,i){return '<g class="sc" id="sc'+i+'">'+fn()+'</g>';}).join("")+'</svg>';
+  fShow(0);
+}
+function fShow(i){
+  fcur=i;fdone=false;clearTimeout(ftimer);
+  var svg=document.querySelector(".stage-svg");
+  svg.querySelectorAll(".sc").forEach(function(g){g.classList.remove("on");});
+  void svg.getBoundingClientRect();
+  $("sc"+i).classList.add("on");
+  $("cap").textContent=CAPS[i];
+  $("segs").innerHTML=DUR.map(function(d,k){return '<button class="seg'+(k<i?' full':'')+(k===i?' live':'')+'" data-seg="'+k+'" aria-label="Scene '+(k+1)+' of '+DUR.length+'"><span style="animation-duration:'+d+'ms"></span></button>';}).join("");
+  frem=DUR[i];if(fplaying)fArm();fUI();
+}
+function fArm(){ft0=Date.now();ftimer=setTimeout(fAdvance,frem);}
+function fAdvance(){if(fcur<DUR.length-1)fShow(fcur+1);else{fplaying=false;fdone=true;fUI();}}
+function fToggle(){
+  if(fdone||!fstarted){fstarted=true;fplaying=true;fShow(0);return;}
+  if(fplaying){fplaying=false;clearTimeout(ftimer);frem=Math.max(300,frem-(Date.now()-ft0));}
+  else{fplaying=true;fArm();}
+  fUI();
+}
+function fUI(){
+  var f=$("film");f.classList.toggle("playing",fplaying);f.classList.toggle("paused",fstarted&&!fplaying&&!fdone);
+  $("filmplay").hidden=fstarted;
+  $("ftoggle").textContent=fdone?"Replay":(fplaying?"Pause":"Play");
+}
+
+/* ---------- Games ---------- */
 function matchHTML(key){
   var g=MATCH[key];var opts=shuffle(g.items.map(function(i){return i[1];}));
   var rows=g.items.map(function(it,idx){
-    return '<div class="row"><label for="m-'+key+'-'+idx+'">'+esc(it[0])+'</label><select id="m-'+key+'-'+idx+'" data-m="'+key+'" data-i="'+idx+'"><option value="">Choose…</option>'+opts.map(function(o){return '<option>'+esc(o)+'</option>';}).join("")+'</select><span class="mk" id="mk-'+key+'-'+idx+'"></span></div>';
+    return '<div class="row"><label for="m-'+key+'-'+idx+'">'+esc(it[0])+'</label><select id="m-'+key+'-'+idx+'"><option value="">Choose…</option>'+opts.map(function(o){return '<option>'+esc(o)+'</option>';}).join("")+'</select><span id="mk-'+key+'-'+idx+'"></span></div>';
   }).join("");
   var done=state.games[key]===true;
   return '<h3>'+esc(g.title)+'</h3><p class="hint">'+esc(g.hint)+'</p>'+rows+'<div class="row"><button class="btn" data-check="'+key+'">Check answers</button></div><p class="fb'+(done?' ok':'')+'" id="fb-'+key+'">'+(done?'Solved. Two points banked.':'')+'</p>';
 }
-
 function gameHTML(s){
-  if(s.game==="erbe"||s.game==="bridge")return '<div class="game">'+matchHTML(s.game)+'</div>';
-  if(s.game==="costa"){
-    var won=state.games.steps===true;
+  if(s.game==="erbe"||s.game==="bridge"||s.game==="grid")return '<div class="game">'+matchHTML(s.game)+'</div>';
+  if(s.game==="costa"){var won=state.games.steps===true;
     return '<div class="game"><h3>Walk under the rib</h3><p class="hint">Are you the just soul Verona has been waiting for?</p><button class="btn ghost" id="rib">Walk under the arch</button><p class="fb" id="ribfb"></p></div>'+
-      '<div class="game"><h3>Guess the steps</h3><p class="hint">How many steps to the top of Torre dei Lamberti? Guess before you climb.</p><div class="row"><input type="number" id="steps" min="1" max="2000" inputmode="numeric" aria-label="Number of steps"><button class="btn" id="stepsbtn">Guess</button></div><p class="fb'+(won?' ok':'')+'" id="stepsfb">'+(won?'368. Got it.':'')+'</p></div>';
-  }
-  if(s.game==="bocca"){
-    return '<div class="game"><h3>The lion’s mouth</h3><p class="hint">Write your own anonymous denunciation. Who on this trip walks too fast, or ate the last gnocco?</p><textarea id="boccatxt" maxlength="280" placeholder="I hereby denounce…"></textarea><div class="row"><button class="btn" id="boccabtn">Post it in the bocca</button></div><p class="fb" id="boccafb"></p></div>';
-  }
+      '<div class="game"><h3>Guess the steps</h3><p class="hint">How many steps to the top of Torre dei Lamberti? Guess before you climb.</p><div class="row"><input type="number" id="steps" min="1" max="2000" inputmode="numeric" aria-label="Number of steps"><button class="btn" id="stepsbtn">Guess</button></div><p class="fb'+(won?' ok':'')+'" id="stepsfb">'+(won?'368. Got it.':'')+'</p></div>';}
+  if(s.game==="bocca")return '<div class="game"><h3>The stone mouth</h3><p class="hint">Write your own anonymous denunciation. Who on this trip walks too fast, or ate the last gnocco?</p><textarea id="boccatxt" maxlength="280" placeholder="I hereby denounce…"></textarea><div class="row"><button class="btn" id="boccabtn">Post it in the bocca</button></div><p class="fb" id="boccafb"></p></div>';
   return "";
 }
 
-function stopHTML(s){
-  if(s.meal)return '<div class="meal" id="'+s.id+'"><span class="time" style="color:var(--muted)">'+esc(s.time)+'</span><h3>'+esc(s.title)+'</h3><p>'+esc(s.text)+'</p>'+navHTML(s)+'</div>';
-  var chips=[s.period].concat(s.also).map(function(p){return '<span class="chip '+chipStyle(p)+'">'+esc(PNAME[p])+'</span>';}).join("");
+/* ---------- Walk ---------- */
+function renderStrip(){
+  var i=state.cur;
+  $("strip").innerHTML=STOPS.map(function(x,k){var cls="chipb"+(k===i?" cur":"")+(x.meal?" meal":"")+(state.stamps[x.id]?" done":"");
+    return '<button class="'+cls+'" data-stop="'+k+'" aria-label="'+esc(label(x))+'"'+(k===i?' aria-current="step"':'')+'>'+(x.meal?(x.id==="lunch"?"Lunch":"Dinner"):x.n)+'</button>';}).join("");
+  var c=document.querySelector("#strip .cur"),st=$("strip");
+  if(c)st.scrollLeft=Math.max(0,c.offsetLeft-st.clientWidth/2+c.offsetWidth/2);
+}
+function stepNav(i){
+  var s=STOPS[i],pv=STOPS[i-1],nx=STOPS[i+1];
+  var h='<div class="stepnav">';
+  h+='<button class="btn ghost" '+(pv?'data-stop="'+(i-1)+'"':'disabled')+'>Previous</button>';
+  h+='<button class="btn ghost" data-mapfocus="'+s.id+'">Show on map</button>';
+  h+=nx?'<button class="btn wide" data-stop="'+(i+1)+'">Next: '+esc(nx.n?nx.n+". "+nx.title:nx.title)+'</button>':'<button class="btn wide" data-go="finale">Finish: the final game</button>';
+  h+='</div>';
+  if(nx)h+='<a class="osm" href="'+osmDir(COORDS[s.id],COORDS[nx.id])+'" target="_blank" rel="noopener">Walking route to the next stop (OpenStreetMap)</a>';
+  return h;
+}
+function cardHTML(s,i){
+  if(s.meal)return '<div class="mealcard"><div class="time">'+esc(s.time)+'</div><h3>'+esc(s.title)+'</h3><p>'+esc(s.text)+'</p></div>'+stepNav(i);
+  var chips=[s.period].concat(s.also).map(function(p){return '<span class="chip '+PCLS[p]+'">'+esc(PNAME[p])+'</span>';}).join("");
   var look=s.look?'<div class="look"><p><b>Look closer.</b> '+esc(s.look.q)+'</p><button class="linkbtn" data-reveal="'+s.id+'" style="padding-left:0">Show answer</button><p class="ans" id="ans-'+s.id+'" hidden>'+esc(s.look.a)+'</p></div>':"";
   var quiz="";
-  if(s.quiz){
-    var ch=state.quiz[s.id];
-    quiz='<div class="game quiz"><h3>Quick question</h3><p class="hint">'+esc(s.quiz.q)+'</p><div class="opts">'+s.quiz.opts.map(function(o,i){
-      var cls="opt";if(ch!=null){if(i===s.quiz.a)cls+=" right";else if(i===ch)cls+=" wrong";}
-      return '<button class="'+cls+'" data-q="'+s.id+'" data-i="'+i+'"'+(ch!=null?' disabled':'')+'>'+esc(o)+'</button>';}).join("")+'</div><p class="fb'+(ch!=null?(ch===s.quiz.a?' ok':' bad'):'')+'" id="qfb-'+s.id+'">'+(ch!=null?esc(s.quiz.why):'')+'</p></div>';
-  }
-
+  if(s.quiz){var ch=state.quiz[s.id];
+    quiz='<div class="game quiz"><h3>Quick question</h3><p class="hint">'+esc(s.quiz.q)+'</p><div class="opts">'+s.quiz.opts.map(function(o,k){
+      var cls="opt";if(ch!=null){if(k===s.quiz.a)cls+=" right";else if(k===ch)cls+=" wrong";}
+      return '<button class="'+cls+'" data-q="'+s.id+'" data-i="'+k+'"'+(ch!=null?' disabled':'')+'>'+esc(o)+'</button>';}).join("")+'</div><p class="fb'+(ch!=null?(ch===s.quiz.a?' ok':' bad'):'')+'" id="qfb-'+s.id+'">'+(ch!=null?esc(s.quiz.why):'')+'</p></div>';}
   var st=state.stamps[s.id];
-  return '<article class="stop'+(st?' stamped':'')+'" id="'+s.id+'"><span class="num" aria-hidden="true">'+s.n+'</span>'+
-    '<div class="time">'+esc(s.time)+'</div><h3>'+esc(s.title)+'</h3><div class="chips">'+chips+'</div><p class="walk">'+esc(s.walk)+' <button class="linkbtn" data-mapfocus="'+s.id+'" style="padding:0;color:var(--accent)">Show on map</button></p>'+
-    '<details class="stopbody"><summary>Open this stop</summary><p>'+esc(s.see)+'</p><ul class="facts">'+s.facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join("")+'</ul>'+look+gameHTML(s)+quiz+
-    '<button class="btn'+(st?' ghost':'')+' stamp" data-stamp="'+s.id+'">'+(st?'Stamped. Tap to undo':'Stamp this stop')+'</button>'+navHTML(s)+'</details></article>';
+  return '<div class="time">Stop '+s.n+' of XIV, around '+esc(s.time)+'</div><h3>'+esc(s.title)+'</h3><div class="chips">'+chips+'</div><p class="walknote">'+esc(s.walk)+'</p>'+
+    '<p>'+esc(s.see)+'</p><ul class="facts">'+s.facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join("")+'</ul>'+look+gameHTML(s)+quiz+
+    '<button class="btn'+(st?' ghost':'')+'" data-stamp="'+s.id+'" style="width:100%;margin-top:.4rem">'+(st?'Stamped. Tap to undo':'Stamp this stop')+'</button>'+stepNav(i);
 }
-
-function renderStops(){
-  var open={};document.querySelectorAll("details.stopbody").forEach(function(d){var a=d.closest("article");if(a&&d.open)open[a.id]=true;});
-  document.getElementById("stops").innerHTML=STOPS.map(stopHTML).join("");
-  Object.keys(open).forEach(function(id){var d=document.querySelector("#"+id+" details");if(d)d.open=true;});
+function renderWalk(){
+  if(state.cur<0||state.cur>=STOPS.length)state.cur=0;
+  renderStrip();$("card").innerHTML=cardHTML(STOPS[state.cur],state.cur);
 }
+function setStop(i){state.cur=i;save();if(view!=="walk")go("walk");else{renderWalk();window.scrollTo(0,0);}}
 
+/* ---------- Order game ---------- */
+var oSeq=[],oPool=null,oChecked=false;
 function renderOrder(){
-  var el=document.getElementById("g-order");
-  var seq=renderOrder.seq||[];
-  var pool=renderOrder.pool||shuffle(EVENTS.map(function(e,i){return i;}));
-  renderOrder.pool=pool;renderOrder.seq=seq;
-  var left=pool.filter(function(i){return seq.indexOf(i)<0;});
+  if(!oPool)oPool=shuffle(EVENTS.map(function(e,i){return i;}));
+  var left=oPool.filter(function(i){return oSeq.indexOf(i)<0;});
   var html='<h3>Oldest first</h3><p class="hint">Tap an event to place it next. Tap a placed one to take it back.</p>';
   html+='<div class="pool">'+left.map(function(i){return '<button class="ev" data-pick="'+i+'">'+esc(EVENTS[i][0])+'</button>';}).join("")+'</div>';
-  html+='<p class="seq-label">'+(seq.length?'Your order so far:':'Nothing placed yet.')+'</p><div class="seq">'+seq.map(function(i,k){return '<button class="ev" data-unpick="'+i+'">'+(k+1)+'. '+esc(EVENTS[i][0])+(renderOrder.checked?' <span class="'+(i===k?'mark-ok':'mark-bad')+'">('+esc(EVENTS[i][1])+')</span>':'')+'</button>';}).join("")+'</div>';
-  if(seq.length===EVENTS.length&&!renderOrder.checked)html+='<div class="row"><button class="btn" id="ordercheck">Check my order</button></div>';
-  var msg="";
-  if(renderOrder.checked){
-    var right=seq.filter(function(i,k){return i===k;}).length;
-    msg=right===EVENTS.length?'Perfect stratigraphy. Three points.':right+' of '+EVENTS.length+' in the right place. Dates are shown in brackets.';
-    html+='<p class="fb '+(right===EVENTS.length?'ok':'bad')+'">'+msg+'</p><div class="row"><button class="btn ghost" id="orderagain">Try again</button></div>';
-  } else if(state.order==="won"){html+='<p class="fb ok">Already solved once. Three points banked.</p>';}
-  el.innerHTML=html;
+  html+='<p class="seq-label">'+(oSeq.length?'Your order so far:':'Nothing placed yet.')+'</p><div class="seq">'+oSeq.map(function(i,k){return '<button class="ev" data-unpick="'+i+'">'+(k+1)+'. '+esc(EVENTS[i][0])+(oChecked?' <span class="'+(i===k?'mark-ok':'mark-bad')+'">('+esc(EVENTS[i][1])+')</span>':'')+'</button>';}).join("")+'</div>';
+  if(oSeq.length===EVENTS.length&&!oChecked)html+='<div class="row"><button class="btn" id="ordercheck">Check my order</button></div>';
+  if(oChecked){var right=oSeq.filter(function(i,k){return i===k;}).length;
+    html+='<p class="fb '+(right===EVENTS.length?'ok':'bad')+'">'+(right===EVENTS.length?'Perfect stratigraphy. Three points.':right+' of '+EVENTS.length+' in the right place. Dates are shown in brackets.')+'</p><div class="row"><button class="btn ghost" id="orderagain">Try again</button></div>';}
+  else if(state.order==="won")html+='<p class="fb ok">Already solved once. Three points banked.</p>';
+  $("g-order").innerHTML=html;
 }
-
-function renderAll(){renderStrata();renderStops();renderScore();document.getElementById("g-dialect").innerHTML=matchHTML("dialect");renderOrder();}
-
-document.addEventListener("click",function(e){
-  var t=e.target.closest("button");if(!t)return;
-  if(t.dataset.mapfocus){openMap(t.dataset.mapfocus);return;}
-  if(t.id==="fab"){openMap();return;}
-  if(t.id==="mapclose"){closeMap();return;}
-  if(t.dataset.goto){closeMap();gotoStop(t.dataset.goto);return;}
-  if(t.dataset.view){mapView=t.dataset.view;renderMap();return;}
-  if(t.id==="locate"){locate();return;}
-  if(t.dataset.jump){var tg=document.getElementById(t.dataset.jump);if(tg){var d=tg.querySelector("details");if(d)d.open=true;tg.scrollIntoView();}return;}
-  if(t.dataset.reveal){var a=document.getElementById("ans-"+t.dataset.reveal);a.hidden=!a.hidden;t.textContent=a.hidden?"Show answer":"Hide answer";return;}
-  if(t.dataset.q){var s=STOPS.filter(function(x){return x.id===t.dataset.q;})[0];if(state.quiz[s.id]!=null)return;state.quiz[s.id]=+t.dataset.i;save();
-    var box=t.closest(".quiz");box.querySelectorAll(".opt").forEach(function(b,i){b.disabled=true;if(i===s.quiz.a)b.classList.add("right");else if(i===+t.dataset.i)b.classList.add("wrong");});
-    var fb=document.getElementById("qfb-"+s.id);fb.className="fb "+(+t.dataset.i===s.quiz.a?"ok":"bad");fb.textContent=(+t.dataset.i===s.quiz.a?"Right. ":"Not quite. ")+s.quiz.why;renderScore();return;}
-  if(t.dataset.stamp){var id=t.dataset.stamp;if(state.stamps[id])delete state.stamps[id];else state.stamps[id]=true;save();
-    var art=document.getElementById(id);art.classList.toggle("stamped",!!state.stamps[id]);t.classList.toggle("ghost",!!state.stamps[id]);t.textContent=state.stamps[id]?"Stamped. Tap to undo":"Stamp this stop";renderStrata();renderScore();return;}
-  if(t.dataset.check){var key=t.dataset.check,g=MATCH[key],allOk=true,blank=false;
-    g.items.forEach(function(it,idx){var sel=document.getElementById("m-"+key+"-"+idx),mk=document.getElementById("mk-"+key+"-"+idx);
-      if(!sel.value){blank=true;mk.textContent="";return;}var ok=sel.value===it[1];if(!ok)allOk=false;mk.className=ok?"mark-ok":"mark-bad";mk.textContent=ok?"✓":"✗";});
-    var fb=document.getElementById("fb-"+key);
-    if(blank){fb.className="fb bad";fb.textContent="Fill in every row, then check again.";return;}
-    if(allOk){state.games[key]=true;save();fb.className="fb ok";fb.textContent="All correct. Two points.";}else{fb.className="fb bad";fb.textContent="Some are off. Change the ✗ rows and check again.";}
-    renderScore();return;}
-  if(t.id==="rib"){var n=(state.ribTries||0)+1;state.ribTries=n;save();document.getElementById("ribfb").textContent="Attempt "+n+". "+RIB[(n-1)%RIB.length];return;}
-  if(t.id==="stepsbtn"){var v=parseInt(document.getElementById("steps").value,10),fb2=document.getElementById("stepsfb");
-    if(!v){fb2.className="fb bad";fb2.textContent="Enter a number first.";return;}
-    if(v===368){state.games.steps=true;save();fb2.className="fb ok";fb2.textContent="368 exactly. Two points, and your legs will confirm it.";renderScore();}
-    else{fb2.className="fb bad";fb2.textContent=v<368?"Higher. Medieval towers don’t do short.":"Lower. It’s tall, not that tall.";}return;}
-  if(t.id==="boccabtn"){var txt=document.getElementById("boccatxt").value.trim(),fb3=document.getElementById("boccafb");
-    if(!txt){fb3.className="fb bad";fb3.textContent="The bocca is empty. Even the Venetians needed something to go on.";return;}
-    var replies=["Received by the magistrates. Investigation pending since 1797.","Filed. The accused has been sentenced to pay for the next round of ombre.","Noted. The Council of Ten will review it after lunch.","Accepted. Punishment: carry the leftover pandoro home."];
-    fb3.className="fb ok";fb3.textContent="“"+txt+"” — "+replies[Math.floor(Math.random()*replies.length)];document.getElementById("boccatxt").value="";return;}
-  if(t.dataset.pick!=null){renderOrder.seq.push(+t.dataset.pick);renderOrder();return;}
-  if(t.dataset.unpick!=null){if(renderOrder.checked)return;var i2=+t.dataset.unpick;renderOrder.seq=renderOrder.seq.filter(function(x){return x!==i2;});renderOrder();return;}
-  if(t.id==="ordercheck"){renderOrder.checked=true;var allr=renderOrder.seq.every(function(i,k){return i===k;});if(allr){state.order="won";save();renderScore();}renderOrder();return;}
-  if(t.id==="orderagain"){renderOrder.seq=[];renderOrder.checked=false;renderOrder.pool=shuffle(EVENTS.map(function(e,i){return i;}));renderOrder();return;}
-  if(t.id==="reset"){if(confirm("Clear all stamps, answers and points?")){state=fill({});save();renderOrder.seq=[];renderOrder.checked=false;renderAll();}return;}
-});
 
 /* ---------- Map ---------- */
 var LAT0=45.4500,LON0=10.9840,KY=69580,KX=69580*0.7011;
 var RIVER=[[45.4362,10.9792],[45.4378,10.9830],[45.4392,10.9858],[45.4404,10.9873],[45.4420,10.9884],[45.4437,10.9898],[45.4455,10.9920],[45.4468,10.9940],[45.4477,10.9965],[45.4477,10.9993],[45.4468,11.0010],[45.4455,11.0017],[45.4440,11.0018],[45.4420,11.0014],[45.4400,11.0008],[45.4380,11.0004],[45.4360,11.0006],[45.4345,11.0020]];
 var STREETS=[
   [[45.4388,10.9922],[45.4398,10.9885]],
-  [[45.4403,10.9890],[45.4413,10.9918],[45.4423,10.9948],[45.4426,10.9965]],
-  [[45.4387,10.9940],[45.4405,10.9958],[45.4423,10.9973]],
-  [[45.4425,10.9978],[45.4417,10.9985],[45.4405,10.9990]],
-  [[45.4428,10.9975],[45.4436,10.9993],[45.4449,10.9997],[45.4470,10.9995]]
+  [[45.4402,10.9889],[45.4410,10.9917],[45.4420,10.9947],[45.4433,10.9968],[45.4450,10.9995]],
+  [[45.4387,10.9940],[45.4405,10.9958],[45.4425,10.9976]],
+  [[45.4433,10.9968],[45.4425,10.9978],[45.4403,10.9993],[45.4396,11.0003]],
+  [[45.4450,10.9995],[45.4470,10.9994]]
 ];
-var LABELS=[["Adige",45.4489,10.9948],["Piazza Bra",45.4378,10.9905],["Via Mazzini",45.4397,10.9958],["Corso Cavour",45.4416,10.9898]];
-var CENTRE=["borsari","erbe","costa","signori","arche","lunch","giulietta","anastasia","dinner"];
-var mapView="all",mapSel=null,me=null;
+var DECU=[[45.4402,10.9889],[45.4410,10.9917],[45.4420,10.9947],[45.4433,10.9968],[45.4450,10.9995],[45.4457,11.0007],[45.4462,11.0022]];
+var CARDO=[[45.4403,10.9993],[45.4425,10.9978],[45.4433,10.9968],[45.4446,10.9957]];
+var LABELS=[["Adige",45.4489,10.9948],["Piazza Bra",45.4378,10.9905],["Via Mazzini",45.4398,10.9960],["Corso Cavour",45.4416,10.9896]];
+var CENTRE=["borsari","erbe","costa","signori","scavi","arche","lunch","giulietta","leoni","anastasia","dinner"];
+var mapView="all",mapSel=null,me=null,showRoman=false;
 function P(c){return [(c[1]-LON0)*KX,(LAT0-c[0])*KY];}
 function pts(a){return a.map(function(c){var p=P(c);return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");}
 function osmPt(c){return "https://www.openstreetmap.org/?mlat="+c[0]+"&mlon="+c[1]+"#map=18/"+c[0]+"/"+c[1];}
 function osmDir(a,b){return "https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route="+a[0]+"%2C"+a[1]+"%3B"+b[0]+"%2C"+b[1];}
-function byId(id){return STOPS.filter(function(x){return x.id===id;})[0];}
-function label(s){return (s.n?s.n+". ":"")+s.title;}
-function nextId(){var r=realStops().filter(function(s){return !state.stamps[s.id];})[0];return r?r.id:null;}
-function navHTML(s){
-  var i=STOPS.indexOf(s),nx=STOPS[i+1];if(!nx)return "";
-  return '<div class="nextnav"><b>Next:</b> '+esc(label(nx))+'<div class="row"><button class="btn ghost" data-mapfocus="'+nx.id+'">Show on map</button><a href="'+osmDir(COORDS[s.id],COORDS[nx.id])+'" target="_blank" rel="noopener">Walking route in OSM</a></div></div>';
-}
 function bbox(ids,pad){var xs=[],ys=[];ids.forEach(function(id){var p=P(COORDS[id]);xs.push(p[0]);ys.push(p[1]);});
-  var x0=Math.min.apply(null,xs)-pad,y0=Math.min.apply(null,ys)-pad,w=Math.max.apply(null,xs)+pad-x0,h=Math.max.apply(null,ys)+pad-y0;return [x0,y0,w,h];}
+  var x0=Math.min.apply(null,xs)-pad,y0=Math.min.apply(null,ys)-pad;return [x0,y0,Math.max.apply(null,xs)+pad-x0,Math.max.apply(null,ys)+pad-y0];}
 function renderMap(){
+  if(!mapSel)mapSel=STOPS[state.cur]?STOPS[state.cur].id:(nextId()||STOPS[0].id);
   var ids=STOPS.map(function(s){return s.id;});
   var vb=mapView==="centre"?bbox(CENTRE,45):bbox(ids,70);
-  var nid=nextId();
+  var nid=nextId(),zoom=mapView==="centre";
   var svg='<svg class="mapsvg" viewBox="'+vb.map(function(v){return v.toFixed(0);}).join(" ")+'" role="img" aria-label="Map of the route with numbered stops">';
   svg+='<polyline class="m-river" points="'+pts(RIVER)+'"/>';
   STREETS.forEach(function(st){svg+='<polyline class="m-street" points="'+pts(st)+'"/>';});
+  if(showRoman){svg+='<polyline class="m-roman" points="'+pts(DECU)+'"/><polyline class="m-roman" points="'+pts(CARDO)+'"/>';
+    var a=P([45.4420,10.9950]),b=P([45.4411,10.9991]),fs=zoom?13:22;
+    svg+='<text class="m-rlabel" style="font-size:'+fs+'px" x="'+a[0].toFixed(0)+'" y="'+(a[1]+fs*1.6).toFixed(0)+'">decumanus</text><text class="m-rlabel" style="font-size:'+fs+'px" x="'+(b[0]+fs*.8).toFixed(0)+'" y="'+b[1].toFixed(0)+'">cardo</text>';}
   svg+='<polyline class="m-route" points="'+pts(ids.map(function(id){return COORDS[id];}))+'"/>';
   LABELS.forEach(function(l){var p=P([l[1],l[2]]);svg+='<text class="m-label" x="'+p[0].toFixed(0)+'" y="'+p[1].toFixed(0)+'">'+esc(l[0])+'</text>';});
+  var r=zoom?13:24;
   STOPS.forEach(function(s){var p=P(COORDS[s.id]);var cls="m-mk"+(s.meal?" meal":"")+(state.stamps[s.id]?" done":"")+(s.id===mapSel?" sel":"");
     svg+='<g class="'+cls+'" data-mk="'+s.id+'" tabindex="0" role="button" aria-label="'+esc(label(s))+'" transform="translate('+p[0].toFixed(1)+' '+p[1].toFixed(1)+')">'+
-      (s.id===nid?'<circle class="halo" r="27"/>':'')+'<circle class="main" r="'+(s.meal?16:19)+'"/><text>'+(s.meal?(s.id==="lunch"?"L":"D"):s.n)+'</text></g>';});
+      (s.id===nid?'<circle class="halo" r="'+(r+8)+'"/>':'')+'<circle class="main" r="'+r+'"/><text style="font-size:'+(zoom?10:18)+'px">'+(s.meal?(s.id==="lunch"?"L":"D"):s.n)+'</text></g>';});
   if(me){var q=P(me);svg+='<circle class="m-me" cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="11"/>';}
   svg+='</svg>';
-  document.getElementById("mapbox").innerHTML=svg;
-  renderCard();
-}
-function renderCard(){
-  var el=document.getElementById("mapcard");var s=byId(mapSel);
-  if(!s){el.innerHTML='<p class="mapnote">All stops stamped. Bravi! Tap any marker to revisit it.</p>';return;}
-  var i=STOPS.indexOf(s),pv=STOPS[i-1];
-  el.innerHTML='<span class="time" style="color:var(--muted)">'+esc(s.time)+(s.id===nextId()?', your next stop':'')+'</span><h3>'+esc(label(s))+'</h3>'+
-    '<div class="row"><button class="btn" data-goto="'+s.id+'">Open this stop</button></div>'+
-    '<div class="row">'+(pv?'<a href="'+osmDir(COORDS[pv.id],COORDS[s.id])+'" target="_blank" rel="noopener">Walk here from '+esc(pv.n||pv.title)+' (OSM)</a>':'')+
+  $("mapbox").innerHTML=svg;
+  $("romanbtn").textContent=showRoman?"Hide Roman streets":"Show Roman streets";
+  var s=byId(mapSel),i=idxOf(mapSel),pv=STOPS[i-1];
+  $("mapcard").innerHTML='<span class="time" style="color:var(--muted)">'+esc(s.time)+(s.id===nid?', your next unstamped stop':'')+'</span><h3>'+esc(label(s))+'</h3>'+
+    '<div class="row"><button class="btn" data-stopid="'+s.id+'">Open this stop</button></div>'+
+    '<div class="row">'+(pv?'<a href="'+osmDir(COORDS[pv.id],COORDS[s.id])+'" target="_blank" rel="noopener">Walk here from '+esc(pv.n||"lunch")+' (OSM)</a>':'')+
     '<a href="'+osmPt(COORDS[s.id])+'" target="_blank" rel="noopener">Open in OSM</a></div>';
 }
-function openMap(focus){mapSel=focus||nextId()||STOPS[0].id;if(focus&&CENTRE.indexOf(focus)>-1)mapView="centre";else if(focus)mapView="all";
-  document.getElementById("sheet").hidden=false;document.body.style.overflow="hidden";renderMap();document.getElementById("mapclose").focus();}
-function closeMap(){document.getElementById("sheet").hidden=true;document.body.style.overflow="";}
-function gotoStop(id){var el=document.getElementById(id);if(!el)return;var d=el.querySelector("details");if(d)d.open=true;el.scrollIntoView({block:"start"});}
-function locate(){var msg=document.getElementById("mapmsg");
+function locate(){var msg=$("mapmsg");
   if(!navigator.geolocation){msg.textContent="Location isn’t available here. Use the OSM links to navigate.";return;}
   msg.textContent="Finding you…";
   try{navigator.geolocation.getCurrentPosition(function(pos){me=[pos.coords.latitude,pos.coords.longitude];
@@ -592,12 +870,58 @@ function locate(){var msg=document.getElementById("mapmsg");
     function(){msg.textContent="Location isn’t available in this view. Use “Open in OSM” to see yourself on a live map.";},{enableHighAccuracy:true,timeout:10000});}
   catch(err){msg.textContent="Location isn’t available in this view. Use “Open in OSM” to see yourself on a live map.";}
 }
-document.getElementById("mapbox").addEventListener("click",function(e){var g=e.target.closest("[data-mk]");if(!g)return;mapSel=g.dataset.mk;renderMap();});
-document.getElementById("mapbox").addEventListener("keydown",function(e){var g=e.target.closest("[data-mk]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();mapSel=g.dataset.mk;renderMap();var n=document.querySelector('[data-mk="'+mapSel+'"]');if(n)n.focus();}});
-document.getElementById("sheet").addEventListener("click",function(e){if(e.target.id==="sheet")closeMap();});
-document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("sheet").hidden)closeMap();});
 
-renderAll();
+/* ---------- Events ---------- */
+document.addEventListener("click",function(e){
+  var t=e.target.closest("button");if(!t)return;
+  if(t.dataset.go){go(t.dataset.go);return;}
+  if(t.dataset.layer){state.layer=t.dataset.layer;save();renderStrata();renderLayer();return;}
+  if(t.dataset.stopid){setStop(idxOf(t.dataset.stopid));return;}
+  if(t.dataset.stop!=null){setStop(+t.dataset.stop);return;}
+  if(t.dataset.mapfocus){mapSel=t.dataset.mapfocus;mapView=CENTRE.indexOf(mapSel)>-1?"centre":"all";go("map");return;}
+  if(t.dataset.view){mapView=t.dataset.view;renderMap();return;}
+  if(t.id==="romanbtn"){showRoman=!showRoman;renderMap();return;}
+  if(t.id==="locate"){locate();return;}
+  if(t.id==="filmplay"||t.id==="ftoggle"){fToggle();return;}
+  if(t.id==="fprev"){fstarted=true;fplaying=true;fShow(Math.max(0,fcur-1));return;}
+  if(t.id==="fnext"){fstarted=true;fplaying=true;fShow(Math.min(DUR.length-1,fcur+1));return;}
+  if(t.dataset.seg!=null){fstarted=true;fplaying=true;fShow(+t.dataset.seg);return;}
+  if(t.dataset.reveal){var a=$("ans-"+t.dataset.reveal);a.hidden=!a.hidden;t.textContent=a.hidden?"Show answer":"Hide answer";return;}
+  if(t.dataset.q){var s=byId(t.dataset.q);if(state.quiz[s.id]!=null)return;state.quiz[s.id]=+t.dataset.i;save();
+    t.closest(".quiz").querySelectorAll(".opt").forEach(function(b,i){b.disabled=true;if(i===s.quiz.a)b.classList.add("right");else if(i===+t.dataset.i)b.classList.add("wrong");});
+    var fb=$("qfb-"+s.id);fb.className="fb "+(+t.dataset.i===s.quiz.a?"ok":"bad");fb.textContent=(+t.dataset.i===s.quiz.a?"Right. ":"Not quite. ")+s.quiz.why;renderScore();return;}
+  if(t.dataset.stamp){var id=t.dataset.stamp;if(state.stamps[id])delete state.stamps[id];else state.stamps[id]=true;save();
+    t.classList.toggle("ghost",!!state.stamps[id]);t.textContent=state.stamps[id]?"Stamped. Tap to undo":"Stamp this stop";renderStrip();renderStrata();renderScore();return;}
+  if(t.dataset.check){var key=t.dataset.check,g=MATCH[key],allOk=true,blank=false;
+    g.items.forEach(function(it,idx){var sel=$("m-"+key+"-"+idx),mk=$("mk-"+key+"-"+idx);
+      if(!sel.value){blank=true;mk.textContent="";return;}var ok=sel.value===it[1];if(!ok)allOk=false;mk.className=ok?"mark-ok":"mark-bad";mk.textContent=ok?"✓":"✗";});
+    var fb2=$("fb-"+key);
+    if(blank){fb2.className="fb bad";fb2.textContent="Fill in every row, then check again.";return;}
+    if(allOk){state.games[key]=true;save();fb2.className="fb ok";fb2.textContent="All correct. Two points.";}else{fb2.className="fb bad";fb2.textContent="Some are off. Change the ✗ rows and check again.";}
+    renderScore();return;}
+  if(t.id==="rib"){var n=(state.ribTries||0)+1;state.ribTries=n;save();$("ribfb").textContent="Attempt "+n+". "+RIB[(n-1)%RIB.length];return;}
+  if(t.id==="stepsbtn"){var v=parseInt($("steps").value,10),fb3=$("stepsfb");
+    if(!v){fb3.className="fb bad";fb3.textContent="Enter a number first.";return;}
+    if(v===368){state.games.steps=true;save();fb3.className="fb ok";fb3.textContent="368 exactly. Two points, and your legs will confirm it.";renderScore();}
+    else{fb3.className="fb bad";fb3.textContent=v<368?"Higher. Medieval towers don’t do short.":"Lower. It’s tall, not that tall.";}return;}
+  if(t.id==="boccabtn"){var txt=$("boccatxt").value.trim(),fb4=$("boccafb");
+    if(!txt){fb4.className="fb bad";fb4.textContent="The bocca is empty. Even the Venetians needed something to go on.";return;}
+    var replies=["Received by the magistrates. Investigation pending since 1797.","Filed. The accused has been sentenced to pay for the next round of ombre.","Noted. The Council of Ten will review it after lunch.","Accepted. Punishment: carry the leftover pandoro home."];
+    fb4.className="fb ok";fb4.textContent="“"+txt+"” — "+replies[Math.floor(Math.random()*replies.length)];$("boccatxt").value="";return;}
+  if(t.dataset.pick!=null){oSeq.push(+t.dataset.pick);renderOrder();return;}
+  if(t.dataset.unpick!=null){if(oChecked)return;var u=+t.dataset.unpick;oSeq=oSeq.filter(function(x){return x!==u;});renderOrder();return;}
+  if(t.id==="ordercheck"){oChecked=true;if(oSeq.every(function(i,k){return i===k;})){state.order="won";save();renderScore();}renderOrder();return;}
+  if(t.id==="orderagain"){oSeq=[];oChecked=false;oPool=shuffle(EVENTS.map(function(e,i){return i;}));renderOrder();return;}
+  if(t.id==="reset"){if(confirm("Clear all stamps, answers and points?")){state=fill({});save();oSeq=[];oChecked=false;renderStrata();renderLayer();renderScore();renderOrder();$("g-dialect").innerHTML=matchHTML("dialect");}return;}
+});
+$("stagebox").addEventListener("click",function(){if(fstarted)fToggle();});
+$("mapbox").addEventListener("click",function(e){var g=e.target.closest("[data-mk]");if(!g)return;mapSel=g.dataset.mk;renderMap();});
+$("mapbox").addEventListener("keydown",function(e){var g=e.target.closest("[data-mk]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();mapSel=g.dataset.mk;renderMap();var n=document.querySelector('[data-mk="'+mapSel+'"]');if(n)n.focus();}});
+
+/* ---------- Start ---------- */
+buildFilm();renderStrata();renderLayer();renderScore();
+$("g-dialect").innerHTML=matchHTML("dialect");
+go(location.hash.replace("#","")||"story",true);
 })();
 </script>
 </body>
